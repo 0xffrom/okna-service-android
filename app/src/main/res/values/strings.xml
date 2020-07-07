@@ -1,0 +1,27 @@
+<resources>
+    <string name="app_name">Окна Сервис</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="nav_header_title">Окна сервис</string>
+    <string name="nav_header_subtitle">os@okna-servise.com</string>
+    <string name="nav_header_desc">Navigation header</string>
+
+    <string name="action_call">Позвонить</string>
+    <string name="telephone">tel:+74955056514</string>
+
+    <string name="menu_home">Главная</string>
+    <string name="menu_calculator">Калькулятор</string>
+    <string name="menu_company">О компании</string>
+    <string name="menu_contacts">Контакты</string>
+    <string name="menu_lead">Оформить заказ</string>
+
+    <string name="office1_address">Адрес: 142104, Подольск, ул. Б Серпуховская д.43</string>
+    <string name="office1_work_time">Режим работы: Пн. - Вс. с 9.00-18.00</string>
+    <string name="office1_telephone">+7 (495) 505–65-14</string>
+    <string name="card_address">Адрес</string>
+    <string name="card_telephone">Телефон</string>
+    <string name="card_mail">E-mail</string>
+    <string name="card_work_time">Часы работы</string>
+
+
+</resources>
