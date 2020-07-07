@@ -22,6 +22,12 @@
     <string name="card_telephone">Телефон</string>
     <string name="card_mail">E-mail</string>
     <string name="card_work_time">Часы работы</string>
+    <string name="window_p2">Оптимум</string>
+    <string name="window_p1">Бюджет</string>
+    <string name="window_p3">Премиум</string>
+    <string name="p3_description">Rehau DELIGHT-DESIGN 70мм, 5 камер, фурнитура Roto</string>
+    <string name="p2_description">Rehau THERMO 60мм, 4 камеры, фурнитура Roto</string>
+    <string name="p1_description">Reachmont ECO 60мм, 3 камеры, фурнитура VORNE</string>
 
 
 </resources>
