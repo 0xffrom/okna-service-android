@@ -39,15 +39,15 @@ class MainActivity : AppCompatActivity() {
 
         val fab: FloatingActionButton = findViewById(R.id.fab)
         fab.setOnClickListener {
-            if (navController.currentDestination?.id != R.id.nav_lead)
-                navController.navigate(R.id.nav_lead)
+            if (navController.currentDestination?.id != R.id.nav_calculator)
+                navController.navigate(R.id.nav_calculator)
             else
                 navController.popBackStack()
         }
 
         navController.addOnDestinationChangedListener { controller, destination, arguments ->
             run {
-                if (destination.id == R.id.nav_lead)
+                if (destination.id == R.id.nav_calculator)
                     fab.hide()
                 else
                     fab.show()
