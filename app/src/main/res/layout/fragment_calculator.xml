@@ -30,30 +30,35 @@
     </androidx.cardview.widget.CardView>
 
     <TextView
+        android:id="@+id/text_view_bar_width"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center_horizontal"
         android:textSize="18sp"
-        android:padding="3dp"
-        android:text="Длина: 422 м" />
+        android:padding="3dp" />
     <SeekBar
-        android:id="@+id/seekBar_Width"
-        android:progress="1"
+        android:id="@+id/seekBar_width"
         android:layout_width="match_parent"
+        android:layout_marginHorizontal="15dp"
         android:layout_height="20dp"/>
     <TextView
+        android:id="@+id/text_view_bar_height"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center_horizontal"
         android:textSize="18sp"
-        android:padding="3dp"
-        android:text="Высота: 422 м" />
+        android:padding="3dp" />
     <SeekBar
-        android:id="@+id/seekBar_Height"
-        android:progress="1"
+        android:id="@+id/seekBar_height"
+        android:layout_marginHorizontal="15dp"
         android:layout_width="match_parent"
         android:layout_height="20dp"/>
-
+    <Button
+        android:layout_margin="5dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:text="Выставить вручную"/>
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

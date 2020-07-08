@@ -1,6 +1,7 @@
 package com.goga133.oknaservice.adapters
 
 import android.content.Context
+import android.database.DataSetObserver
 import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
@@ -10,6 +11,8 @@ import android.widget.TextView
 import android.widget.Toast
 import com.bumptech.glide.Glide
 import com.goga133.oknaservice.R
+import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+import com.smarteist.autoimageslider.SliderPager
 import com.smarteist.autoimageslider.SliderViewAdapter
 
 class SliderAdapter(private val context: Context, elements: Array<SliderItem>) : SliderViewAdapter<SliderAdapter.SliderAdapterVH>() {
@@ -26,13 +29,10 @@ class SliderAdapter(private val context: Context, elements: Array<SliderItem>) :
         viewHolder.textViewDescription.text = sliderItem.description
         viewHolder.textViewDescription.textSize = 16f
         viewHolder.textViewDescription.setTextColor(Color.WHITE)
+
         Glide.with(viewHolder.itemView)
             .load(sliderItem.image)
             .into(viewHolder.imageViewBackground)
-        viewHolder.itemView.setOnClickListener(View.OnClickListener() {
-                Toast.makeText(context, "This is item in position ${mSliderItems[position].windowId}", Toast.LENGTH_SHORT)
-                    .show()
-        })
     }
 
     override fun getCount(): Int {
@@ -42,9 +42,9 @@ class SliderAdapter(private val context: Context, elements: Array<SliderItem>) :
 
     class SliderAdapterVH(itemView: View) : ViewHolder(itemView) {
         val imageViewBackground: ImageView = itemView.findViewById(R.id.iv_auto_image_slider)
-        val imageGifContainer: ImageView = itemView.findViewById(R.id.iv_gif_container)
         val textViewDescription: TextView = itemView.findViewById(R.id.tv_auto_image_slider)
     }
+
 
     data class SliderItem(val image : Int, val windowId : String, val description: String? = null)
 }
