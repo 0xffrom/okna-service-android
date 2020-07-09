@@ -12,7 +12,6 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
-import androidx.lifecycle.lifecycleScope
 import com.goga133.oknaservice.R
 import com.goga133.oknaservice.adapters.SliderAdapter
 import com.goga133.oknaservice.listeners.OnPageChangeListener
@@ -27,14 +26,13 @@ import com.smarteist.autoimageslider.SliderAnimations
 import com.smarteist.autoimageslider.SliderView
 import kotlinx.android.synthetic.main.fragment_calculator.view.*
 import kotlinx.android.synthetic.main.value_setter_dialog.*
-import kotlinx.coroutines.launch
 
 
 class CalculatorFragment : Fragment() {
 
+
     private lateinit var widthSeekBar: SeekBar
     private lateinit var heightSeekBar: SeekBar
-
     private lateinit var widthTextView: TextView
     private lateinit var heightTextView: TextView
 
@@ -48,17 +46,15 @@ class CalculatorFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         val calculatorViewModel = ViewModelProviders.of(this).get(CalculatorViewModel::class.java)
-        elements = calculatorViewModel.arraySliders.value ?: arrayOf()
-        currentWindow = Calculator().chooseWindow(elements[0].windowId)
-
 
         val root = inflater.inflate(R.layout.fragment_calculator, container, false)
+        widthSeekBar = root.seekBar_width
+        heightSeekBar = root.seekBar_height
+        widthTextView = root.text_view_bar_width
+        heightTextView = root.text_view_bar_height
 
-        widthSeekBar = root.findViewById(R.id.seekBar_width)
-        heightSeekBar = root.findViewById(R.id.seekBar_height)
-
-        widthTextView = root.findViewById(R.id.text_view_bar_width)
-        heightTextView = root.findViewById(R.id.text_view_bar_height)
+        elements = calculatorViewModel.arraySliders.value ?: arrayOf()
+        currentWindow = Calculator().chooseWindow(elements[0].windowId)
 
         widthSeekBar.setOnSeekBarChangeListener(OnSeekBarChangeListener(fun(progress: Int): Unit {
             widthTextView.text = "Длина: ${progress + (currentWindow.minW)} см."
@@ -71,9 +67,30 @@ class CalculatorFragment : Fragment() {
             updateSummaryPrice(root)
         }))
 
-        viewLifecycleOwner.lifecycleScope.launch {
-            val sliderView = initSliderView(root)
-        }
+        // TODO: ЧЕЛ БЛЯТЬ ДАВАЙ НАХУЙ КОРУТИНЫ СЮДА, ХУЛИ ВСЁ СИНХРОННО КАК У ДАУНА
+        val sliderView: SliderView = root.findViewById(R.id.imageSlider)
+        val sliderAdapter = SliderAdapter(root.context, elements)
+        sliderView.setSliderAdapter(sliderAdapter)
+        sliderView.setIndicatorAnimation(IndicatorAnimationType.WORM)
+        sliderView.setSliderTransformAnimation(SliderAnimations.SIMPLETRANSFORMATION)
+        sliderView.isAutoCycle = false
+        sliderView.indicatorRadius = 1
+        sliderView.indicatorSelectedColor = Color.WHITE
+        sliderView.indicatorUnselectedColor = Color.GRAY
+        sliderView.sliderPager.addOnPageChangeListener(
+            OnPageChangeListener(
+                fun(position: Int): Unit {
+                    currentWindow = Calculator().chooseWindow(elements[position].windowId)
+                    windowId = elements[position].windowId
+                    heightSeekBar.max = currentWindow.maxH - currentWindow.minH
+                    widthSeekBar.max = currentWindow.maxW - currentWindow.minW
+
+                    heightSeekBar.progress = 0
+                    widthSeekBar.progress = 0
+                }
+            )
+        )
+        sliderView.currentPagePosition = 0
 
         root.findViewById<Button>(R.id.hand_input_button).setOnClickListener {
             val mDialogView =
@@ -193,34 +210,6 @@ class CalculatorFragment : Fragment() {
         return root
     }
 
-    private fun initSliderView(root: View): SliderView {
-        // ==== Slider Settings ==== //
-        val sliderView: SliderView = root.findViewById(R.id.imageSlider)
-        val sliderAdapter = SliderAdapter(root.context, elements)
-        sliderView.setSliderAdapter(sliderAdapter)
-        sliderView.setIndicatorAnimation(IndicatorAnimationType.WORM)
-        sliderView.setSliderTransformAnimation(SliderAnimations.SIMPLETRANSFORMATION)
-        sliderView.isAutoCycle = false
-        sliderView.indicatorRadius = 1
-        sliderView.indicatorSelectedColor = Color.WHITE
-        sliderView.indicatorUnselectedColor = Color.GRAY
-        sliderView.sliderPager.addOnPageChangeListener(
-            OnPageChangeListener(
-                fun(position: Int): Unit {
-                    currentWindow = Calculator().chooseWindow(elements[position].windowId)
-                    windowId = elements[position].windowId
-                    heightSeekBar.max = currentWindow.maxH - currentWindow.minH
-                    widthSeekBar.max = currentWindow.maxW - currentWindow.minW
-
-                    heightSeekBar.progress = 0
-                    widthSeekBar.progress = 0
-                }
-            )
-        )
-        sliderView.currentPagePosition = 0
-        // ==== Slider Settings ==== //
-        return sliderView
-    }
 
     private lateinit var summaryPrice: Calculator.SummaryPrice
 
@@ -245,7 +234,7 @@ class CalculatorFragment : Fragment() {
             isWinSlope, isWinGrid, isWinInstall, isWinDelivery
         )
 
-        root.add_cart_button.text = "Общая стоимость: ${summaryPrice.sum} р."
+        root.add_cart_button.text = "Общая стоимость: ${summaryPrice.sum + summaryPrice.sumD} р."
         root.text_view_sumW.text = "Стоимость окна: ${summaryPrice.sumW} р."
         root.text_view_sumO.text = "Стоимость опций: ${summaryPrice.sumO} р."
         root.text_view_sumD.text = "Стоимость доставки: ${summaryPrice.sumD} р."

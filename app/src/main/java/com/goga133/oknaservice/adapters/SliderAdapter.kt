@@ -28,7 +28,7 @@ class SliderAdapter(private val context: Context, elements: Array<SliderItem>) :
         viewHolder.textViewDescription.textSize = 16f
         viewHolder.textViewDescription.setTextColor(Color.WHITE)
 
-        Glide.with(viewHolder.itemView)
+        Glide.with(context)
             .load(sliderItem.image)
             .into(viewHolder.imageViewBackground)
     }

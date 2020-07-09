@@ -699,7 +699,7 @@ class Calculator {
         }
 
         sumD = if (isWinDelivery) price.delivery else 0;
-        sum = sumW + sumO + sumM + sumD;
+        sum = sumW + sumO + sumM;
 
         return SummaryPrice(
             sum = sum,
