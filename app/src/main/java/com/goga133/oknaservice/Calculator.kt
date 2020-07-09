@@ -21,9 +21,8 @@ class Calculator {
     // sum - Общая сумма
     // sumW - Стоимость изделия
     // sumO - Стоимость опций
-    // priceSill - Цена подоконника
-    // priceTide - Цена отлива
-    // priceSlope - Цена откоса
+    // sumM - Стоимость монтажа
+    // sumD - Стоимость доставки
     data class SummaryPrice(
         val sum: Int,
         val sumW: Int,

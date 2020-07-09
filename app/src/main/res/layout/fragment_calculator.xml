@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -8,9 +9,11 @@
     tools:context=".ui.calculator.CalculatorFragment">
 
     <androidx.core.widget.NestedScrollView
+        android:id="@+id/nestedScrollView"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintBottom_toTopOf="@id/linearLayout"
+        android:layout_height="0dp"
+        android:layout_weight="0.9"
+        app:layout_constraintBottom_toBottomOf="@id/update_price_button"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -18,14 +21,12 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:layout_marginBottom="10dp"
             android:orientation="vertical">
 
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="16dp"
+                android:layout_margin="10dp"
                 app:cardCornerRadius="6dp">
 
                 <com.smarteist.autoimageslider.SliderView
@@ -75,42 +76,45 @@
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/hand_input_button"
+                style="@style/Widget.MaterialComponents.Button.UnelevatedButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_margin="5dp"
-                sstyle="@style/Widget.MaterialComponents.Button.UnelevatedButton"
                 android:text="Выставить вручную" />
 
+
             <com.google.android.material.button.MaterialButtonToggleGroup
-                android:layout_height="70dp"
                 android:id="@+id/toggle_button_group_p"
-                app:checkedButton="@id/p1_button"
-                app:singleSelection="true"
+                android:layout_width="match_parent"
+                android:layout_height="70dp"
                 android:layout_gravity="center"
                 android:gravity="center"
                 android:orientation="horizontal"
-                android:layout_width="match_parent">
+                app:checkedButton="@id/p1_button"
+                app:selectionRequired="true"
+                app:singleSelection="true">
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/p1_button"
+                    style="@style/Widget.MaterialComponents.Button.OutlinedButton"
                     android:layout_width="wrap_content"
                     android:layout_height="60dp"
-                    style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-                    android:text="@string/window_p1" />
+                    android:text="@string/window_p1"
+                    app:selectionRequired="false" />
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/p2_button"
+                    style="@style/Widget.MaterialComponents.Button.OutlinedButton"
                     android:layout_width="wrap_content"
                     android:layout_height="60dp"
-                    style="@style/Widget.MaterialComponents.Button.OutlinedButton"
                     android:text="@string/window_p2" />
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/p3_button"
+                    style="@style/Widget.MaterialComponents.Button.OutlinedButton"
                     android:layout_width="wrap_content"
                     android:layout_height="60dp"
-                    style="@style/Widget.MaterialComponents.Button.OutlinedButton"
                     android:text="@string/window_p3" />
             </com.google.android.material.button.MaterialButtonToggleGroup>
 
@@ -120,175 +124,262 @@
                 android:layout_marginHorizontal="40dp">
 
                 <com.google.android.material.textview.MaterialTextView
+                    style="@style/Widget.MaterialComponents.TextView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_margin="2dp"
                     android:layout_weight="0.1"
                     android:gravity="center"
-                    style="@style/Widget.MaterialComponents.TextView"
                     android:text="@string/p1_description"
-                    android:layout_margin="2dp"
                     android:textSize="14sp" />
 
                 <com.google.android.material.textview.MaterialTextView
+                    style="@style/Widget.MaterialComponents.TextView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_margin="2dp"
                     android:layout_weight=".1"
                     android:gravity="center"
-                    style="@style/Widget.MaterialComponents.TextView"
                     android:text="@string/p2_description"
-                    android:layout_margin="2dp"
                     android:textSize="14sp" />
 
                 <com.google.android.material.textview.MaterialTextView
+                    style="@style/Widget.MaterialComponents.TextView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_margin="2dp"
                     android:layout_weight=".1"
                     android:gravity="center"
-                    style="@style/Widget.MaterialComponents.TextView"
                     android:text="@string/p3_description"
-                    android:layout_margin="2dp"
                     android:textSize="14sp" />
             </LinearLayout>
+
             <com.google.android.material.textview.MaterialTextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="15dp"
-                android:textSize="18sp"
-                android:textAllCaps="true"
-                android:textStyle="bold"
-                android:gravity="center"
                 android:layout_gravity="center"
-                android:text="Стеклопакет" />
+                android:layout_marginTop="15dp"
+                android:gravity="center"
+                android:text="Стеклопакет"
+                android:textAllCaps="true"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
             <com.google.android.material.button.MaterialButtonToggleGroup
-                android:layout_height="70dp"
                 android:id="@+id/toggle_button_group_glass"
-                app:checkedButton="@id/glass1_button"
-                app:singleSelection="true"
-                android:layout_gravity="center"
-                android:gravity="center"
-                android:orientation="horizontal"
-                android:layout_width="match_parent">
-                    <com.google.android.material.button.MaterialButton
-                        android:id="@+id/glass1_button"
-                        android:layout_width="wrap_content"
-                        android:layout_height="60dp"
-                        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-                        android:text="Однокамерный" />
-
-                    <com.google.android.material.button.MaterialButton
-                        android:id="@+id/glass2_button"
-                        android:layout_width="wrap_content"
-                        android:layout_height="60dp"
-                        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-                        android:text="Двухкамерный" />
-            </com.google.android.material.button.MaterialButtonToggleGroup>
-            <com.google.android.material.textview.MaterialTextView
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="15dp"
-                android:textSize="18sp"
-                android:textAllCaps="true"
-                android:textStyle="bold"
-                android:gravity="center"
-                android:layout_gravity="center"
-                android:text="Тип дома" />
-
-            <com.google.android.material.button.MaterialButtonToggleGroup
                 android:layout_height="70dp"
-                android:id="@+id/toggle_button_group_house"
-                app:checkedButton="@id/panel_button"
-                app:singleSelection="true"
                 android:layout_gravity="center"
                 android:gravity="center"
                 android:orientation="horizontal"
-                android:layout_width="match_parent">
+                app:checkedButton="@id/glass1_button"
+                app:selectionRequired="true"
+                app:singleSelection="true">
+
                 <com.google.android.material.button.MaterialButton
-                    android:id="@+id/panel_button"
+                    android:id="@+id/glass1_button"
+                    style="@style/Widget.MaterialComponents.Button.OutlinedButton"
                     android:layout_width="wrap_content"
                     android:layout_height="60dp"
+                    android:text="Однокамерный" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/glass2_button"
                     style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="60dp"
+                    android:text="Двухкамерный" />
+            </com.google.android.material.button.MaterialButtonToggleGroup>
+
+            <com.google.android.material.textview.MaterialTextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="15dp"
+                android:gravity="center"
+                android:text="Тип дома"
+                android:textAllCaps="true"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+            <com.google.android.material.button.MaterialButtonToggleGroup
+                android:id="@+id/toggle_button_group_house"
+                android:layout_width="match_parent"
+                android:layout_height="70dp"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:orientation="horizontal"
+                app:checkedButton="@id/panel_button"
+                app:selectionRequired="true"
+                app:singleSelection="true">
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/panel_button"
+                    style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="60dp"
                     android:text="Панельный" />
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/brick_button"
+                    style="@style/Widget.MaterialComponents.Button.OutlinedButton"
                     android:layout_width="wrap_content"
                     android:layout_height="60dp"
-                    style="@style/Widget.MaterialComponents.Button.OutlinedButton"
                     android:text="Кирпичный" />
             </com.google.android.material.button.MaterialButtonToggleGroup>
 
             <com.google.android.material.textview.MaterialTextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="15dp"
-                android:textSize="18sp"
-                android:textAllCaps="true"
-                android:textStyle="bold"
-                android:gravity="center"
                 android:layout_gravity="center"
-                android:text="Опции" />
-
-            <RelativeLayout
-                android:layout_width="match_parent"
+                android:layout_margin="5dp"
                 android:gravity="center"
-                android:layout_height="wrap_content">
-                <com.google.android.material.checkbox.MaterialCheckBox
-                    android:id="@+id/is_sill"
-                    android:layout_height="wrap_content"
-                    android:layout_width="wrap_content"
-                    android:text="Подоконник"
-                    android:layout_marginRight="30dp"
-                    android:textSize="15sp"
-                    android:layout_alignParentStart="true"
+                android:text="Опции"
+                android:textAllCaps="true"
+                android:textSize="18sp"
+                android:textStyle="bold" />
 
-                    style="?attr/checkboxStyle" />
-                <com.google.android.material.checkbox.MaterialCheckBox
-                    android:id="@+id/is_tide"
+            <com.google.android.material.button.MaterialButtonToggleGroup
+                android:id="@+id/toggle_button_group_options"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:orientation="vertical"
+                app:selectionRequired="false"
+                app:singleSelection="false">
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/options_sill_button"
+                    style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_width="wrap_content"
-                    android:text="Отлив"
-                    android:layout_marginStart="30dp"
-                    android:textSize="15sp"
-                    android:layout_toEndOf="@id/is_sill"
-                    style="?attr/checkboxStyle" />
-                <com.google.android.material.checkbox.MaterialCheckBox
-                    android:id="@+id/is_slope"
+                    android:insetTop="0dp"
+                    android:insetBottom="0dp"
+                    android:text="Подоконник" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/options_tide_button"
+                    style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_width="wrap_content"
-                    android:text="Откосы"
-                    android:layout_below="@id/is_sill"
-                    android:textSize="15sp"
-                    style="?attr/checkboxStyle" />
-                <com.google.android.material.checkbox.MaterialCheckBox
-                    android:id="@+id/is_grid"
+                    android:insetTop="0dp"
+                    android:insetBottom="0dp"
+                    android:text="Отлив" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/options_slope_button"
+                    style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_width="wrap_content"
-                    android:text="Москитная сетка"
-                    android:textSize="15sp"
-                    android:layout_marginStart="30dp"
-                    android:layout_below="@id/is_tide"
-                    android:layout_toEndOf="@id/is_sill"
-                    style="?attr/checkboxStyle" />
-            </RelativeLayout>
+                    android:insetTop="0dp"
+                    android:insetBottom="0dp"
+                    android:text="Откосы" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/options_grid_button"
+                    style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:insetTop="0dp"
+                    android:insetBottom="0dp"
+                    android:text="Москитная сетка" />
+            </com.google.android.material.button.MaterialButtonToggleGroup>
+
+            <com.google.android.material.textview.MaterialTextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="15dp"
+                android:gravity="center"
+                android:text="Дополнительные услуги"
+                android:textAllCaps="true"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+            <com.google.android.material.button.MaterialButtonToggleGroup
+                android:id="@+id/toggle_button_group_services"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:orientation="vertical"
+                app:selectionRequired="false"
+                app:singleSelection="false">
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/services_montage_button"
+                    style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:insetBottom="0dp"
+                    android:text="Монтажные работы" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/services_delivery_button"
+                    style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:insetTop="0dp"
+                    android:text="Доставка" />
+
+            </com.google.android.material.button.MaterialButtonToggleGroup>
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/text_view_sumW"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:gravity="center"
+                android:textAllCaps="true"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/text_view_sumO"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:textAllCaps="true"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+            <com.google.android.material.textview.MaterialTextView
+                android:layout_width="match_parent"
+                android:id="@+id/text_view_sumM"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:textAllCaps="true"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+            <com.google.android.material.textview.MaterialTextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:id="@+id/text_view_sumD"
+                android:textAllCaps="true"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/add_cart_button"
+                style="@style/Widget.MaterialComponents.Button.UnelevatedButton"
+                app:icon="@drawable/ic_menu_cart"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_margin="5dp"
+                android:text="Добавить в козину" />
 
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
 
-    <LinearLayout
-        android:id="@+id/linearLayout"
-        android:layout_width="match_parent"
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/update_price_button"
+        android:layout_width="wrap_content"
+        android:layout_height="50dp"
         android:layout_gravity="center"
         android:gravity="center"
-        android:layout_height="32dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        android:background="@drawable/background_leaf">
+        app:icon="@drawable/ic_refresh"
+        app:layout_constraintBottom_toBottomOf="@+id/nestedScrollView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
-        <TextView
-            android:gravity="center"
-            android:layout_gravity="center"
-            android:layout_width="match_parent"
-            android:text="Общая стоимость: 10523 р."
-            android:textColor="#FFFFFF"
-            android:layout_height="wrap_content" />
-    </LinearLayout>
-</androidx.constraintlayout.widget.ConstraintLayout>
+</LinearLayout>

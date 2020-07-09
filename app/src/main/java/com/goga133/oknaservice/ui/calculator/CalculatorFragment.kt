@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.Window
 import android.widget.Button
 import android.widget.SeekBar
 import android.widget.TextView
@@ -17,9 +18,12 @@ import com.goga133.oknaservice.R
 import com.goga133.oknaservice.adapters.SliderAdapter
 import com.goga133.oknaservice.listeners.OnPageChangeListener
 import com.goga133.oknaservice.listeners.OnSeekBarChangeListener
+import com.google.android.material.button.MaterialButtonToggleGroup
 import com.smarteist.autoimageslider.IndicatorView.animation.type.IndicatorAnimationType
 import com.smarteist.autoimageslider.SliderAnimations
 import com.smarteist.autoimageslider.SliderView
+import kotlinx.android.synthetic.main.fragment_calculator.*
+import kotlinx.android.synthetic.main.fragment_calculator.view.*
 import kotlinx.android.synthetic.main.value_setter_dialog.*
 
 
@@ -31,7 +35,7 @@ class CalculatorFragment : Fragment() {
     private lateinit var widthTextView: TextView
     private lateinit var heightTextView: TextView
 
-    private lateinit var currentWindow: Calculator.Window
+    private var currentWindow: Calculator.Window = Calculator().chooseWindow("1-1")
     private lateinit var elements: Array<SliderAdapter.SliderItem>
 
     override fun onCreateView(
@@ -53,42 +57,17 @@ class CalculatorFragment : Fragment() {
 
         widthSeekBar.setOnSeekBarChangeListener(OnSeekBarChangeListener(fun(progress: Int): Unit {
             widthTextView.text = "Длина: ${progress + (currentWindow.minW)} см."
+            w = progress + currentWindow.minW
+            updateSummaryPrice(root)
         }))
         heightSeekBar.setOnSeekBarChangeListener(OnSeekBarChangeListener(fun(progress: Int): Unit {
             heightTextView.text = "Высота: ${progress + (currentWindow.minH)} см."
+            h = progress + currentWindow.minH
+            updateSummaryPrice(root)
         }))
 
-        // ===== Slider settings ===== //
-        val sliderView: SliderView = root.findViewById(R.id.imageSlider)
+        val sliderView  = initSliderView(root)
 
-        val sliderAdapter = SliderAdapter(root.context, elements)
-
-        sliderView.setSliderAdapter(sliderAdapter)
-
-        sliderView.setIndicatorAnimation(IndicatorAnimationType.WORM)
-
-        sliderView.setSliderTransformAnimation(SliderAnimations.SIMPLETRANSFORMATION)
-        sliderView.isAutoCycle = false
-        sliderView.indicatorRadius = 1
-        sliderView.indicatorSelectedColor = Color.WHITE
-        sliderView.indicatorUnselectedColor = Color.GRAY
-
-        sliderView.sliderPager.addOnPageChangeListener(
-            OnPageChangeListener(
-                fun(position: Int): Unit {
-
-                    currentWindow = Calculator().chooseWindow(elements[position].windowId)
-                    heightSeekBar.max = currentWindow.maxH - currentWindow.minH
-                    widthSeekBar.max = currentWindow.maxW - currentWindow.minW
-
-                    heightSeekBar.progress = 0
-                    widthSeekBar.progress = 0
-
-                })
-        )
-        sliderView.currentPagePosition = 0
-
-        // ==== Slider Settings ==== //
         root.findViewById<Button>(R.id.hand_input_button).setOnClickListener {
             val mDialogView =
                 LayoutInflater.from(root.context).inflate(R.layout.value_setter_dialog, null)
@@ -121,15 +100,116 @@ class CalculatorFragment : Fragment() {
 
                     mAlertDialog.dismiss()
                 }
-
             }
-
+        }
+        root.toggle_button_group_p.addOnButtonCheckedListener { _: MaterialButtonToggleGroup, i: Int, b: Boolean ->
+            if(b) {
+                when(i){
+                    R.id.p1_button -> this.typeProfile = "p1"
+                    R.id.p2_button -> this.typeProfile = "p2"
+                    R.id.p3_button -> this.typeProfile = "p3"
+                }
+                updateSummaryPrice(root)
+            }
         }
 
-        // TODO: Доделать выплавающий диалог по кнопке.
+        root.toggle_button_group_glass.addOnButtonCheckedListener{_: MaterialButtonToggleGroup, i: Int, b: Boolean ->
+            if(b){
+                when(i){
+                    R.id.glass1_button -> this.typeGlass = "prOne"
+                    R.id.glass2_button -> this.typeGlass = "prTwo"
+                }
+                updateSummaryPrice(root)
+            }
+        }
+
+        root.toggle_button_group_house.addOnButtonCheckedListener{_: MaterialButtonToggleGroup, i: Int, b: Boolean ->
+            if(b){
+                when(i){
+                    R.id.panel_button -> this.typeHome = "panel"
+                    R.id.brick_button -> this.typeHome = "brick"
+                }
+                updateSummaryPrice(root)
+            }
+        }
+
+        root.toggle_button_group_options.addOnButtonCheckedListener{_: MaterialButtonToggleGroup, i: Int, b: Boolean ->
+            when(i){
+                R.id.options_grid_button-> this.isWinGrid = b
+                R.id.options_sill_button -> this.isWinSill = b
+                R.id.options_slope_button-> this.isWinSlope = b
+                R.id.options_tide_button -> this.isWinTide = b
+            }
+            updateSummaryPrice(root)
+        }
+
+        root.toggle_button_group_services.addOnButtonCheckedListener{_: MaterialButtonToggleGroup, i: Int, b: Boolean ->
+            when(i){
+                R.id.services_delivery_button-> this.isWinDelivery = b
+                R.id.services_montage_button -> this.isWinInstall = b
+            }
+            updateSummaryPrice(root)
+        }
+
         return root
 
     }
+
+    private fun initSliderView(root : View) : SliderView{
+        // ==== Slider Settings ==== //
+        val sliderView: SliderView = root.findViewById(R.id.imageSlider)
+        val sliderAdapter = SliderAdapter(root.context, elements)
+        sliderView.setSliderAdapter(sliderAdapter)
+        sliderView.setIndicatorAnimation(IndicatorAnimationType.WORM)
+        sliderView.setSliderTransformAnimation(SliderAnimations.SIMPLETRANSFORMATION)
+        sliderView.isAutoCycle = false
+        sliderView.indicatorRadius = 1
+        sliderView.indicatorSelectedColor = Color.WHITE
+        sliderView.indicatorUnselectedColor = Color.GRAY
+        sliderView.sliderPager.addOnPageChangeListener(
+            OnPageChangeListener(
+                fun(position: Int): Unit {
+                    currentWindow = Calculator().chooseWindow(elements[position].windowId)
+                    heightSeekBar.max = currentWindow.maxH - currentWindow.minH
+                    widthSeekBar.max = currentWindow.maxW - currentWindow.minW
+
+                    heightSeekBar.progress = 0
+                    widthSeekBar.progress = 0
+                }
+            )
+        )
+        sliderView.currentPagePosition = 0
+        // ==== Slider Settings ==== //
+        return sliderView
+    }
+
+    private lateinit var summaryPrice: Calculator.SummaryPrice
+
+    // ==== Default Settings Window Calculator ==== //
+    private var h : Int = 0
+    private var w : Int = 0
+    private var typeProfile : String = "p1"
+    private var typeGlass : String = "prOne"
+    private var typeHome : String = "panel"
+    private var isWinSill : Boolean = false
+    private var isWinSlope : Boolean = false
+    private var isWinTide : Boolean = false
+    private var isWinGrid : Boolean = false
+    private var isWinInstall : Boolean = false
+    private var isWinDelivery : Boolean = false
+    // ==== Default Settings Window Calculator ==== //
+
+    private fun updateSummaryPrice(root : View){
+        summaryPrice = Calculator().calculatePrice(currentWindow, h,w, typeProfile, typeGlass, typeHome, isWinSill, isWinTide,
+            isWinSlope, isWinGrid, isWinInstall, isWinDelivery)
+
+        root.update_price_button.text = "Общая стоимость: ${summaryPrice.sum} р."
+        root.text_view_sumW.text = "Стоимость окна: ${summaryPrice.sumW} р."
+        root.text_view_sumO.text = "Стоимость опций: ${summaryPrice.sumO} р."
+        root.text_view_sumD.text = "Стоимость доставки: ${summaryPrice.sumD} р."
+        root.text_view_sumM.text = "Стоимость монтажа: ${summaryPrice.sumM} р."
+    }
+
 
 }
 
