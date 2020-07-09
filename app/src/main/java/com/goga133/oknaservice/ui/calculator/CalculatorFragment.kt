@@ -12,12 +12,12 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
-import androidx.room.Room
-import com.goga133.oknaservice.models.Calculator
+import androidx.lifecycle.lifecycleScope
 import com.goga133.oknaservice.R
 import com.goga133.oknaservice.adapters.SliderAdapter
 import com.goga133.oknaservice.listeners.OnPageChangeListener
 import com.goga133.oknaservice.listeners.OnSeekBarChangeListener
+import com.goga133.oknaservice.models.Calculator
 import com.goga133.oknaservice.models.Product
 import com.goga133.oknaservice.models.ProductDatabase
 import com.google.android.material.button.MaterialButtonToggleGroup
@@ -27,6 +27,7 @@ import com.smarteist.autoimageslider.SliderAnimations
 import com.smarteist.autoimageslider.SliderView
 import kotlinx.android.synthetic.main.fragment_calculator.view.*
 import kotlinx.android.synthetic.main.value_setter_dialog.*
+import kotlinx.coroutines.launch
 
 
 class CalculatorFragment : Fragment() {
@@ -50,6 +51,7 @@ class CalculatorFragment : Fragment() {
         elements = calculatorViewModel.arraySliders.value ?: arrayOf()
         currentWindow = Calculator().chooseWindow(elements[0].windowId)
 
+
         val root = inflater.inflate(R.layout.fragment_calculator, container, false)
 
         widthSeekBar = root.findViewById(R.id.seekBar_width)
@@ -69,7 +71,9 @@ class CalculatorFragment : Fragment() {
             updateSummaryPrice(root)
         }))
 
-        val sliderView  = initSliderView(root)
+        viewLifecycleOwner.lifecycleScope.launch {
+            val sliderView = initSliderView(root)
+        }
 
         root.findViewById<Button>(R.id.hand_input_button).setOnClickListener {
             val mDialogView =
@@ -85,9 +89,11 @@ class CalculatorFragment : Fragment() {
                 "Длина окна (от ${currentWindow.minW} до ${currentWindow.maxW} см.)"
 
             mAlertDialog.dialog_button_set.setOnClickListener {
-                if (mAlertDialog.dialog_input_value_width.text.toString().isEmpty() || mAlertDialog.dialog_input_value_width.text.toString().toInt()
+                if (mAlertDialog.dialog_input_value_width.text.toString()
+                        .isEmpty() || mAlertDialog.dialog_input_value_width.text.toString().toInt()
                         .let { x -> x < currentWindow.minW || x > currentWindow.maxW } ||
-                    mAlertDialog.dialog_input_value_height.text.toString().isEmpty()  || mAlertDialog.dialog_input_value_height.text.toString().toInt()
+                    mAlertDialog.dialog_input_value_height.text.toString()
+                        .isEmpty() || mAlertDialog.dialog_input_value_height.text.toString().toInt()
                         .let { x -> x < currentWindow.minH || x > currentWindow.maxH }
                 )
                     Toast.makeText(
@@ -106,8 +112,8 @@ class CalculatorFragment : Fragment() {
             }
         }
         root.toggle_button_group_p.addOnButtonCheckedListener { _: MaterialButtonToggleGroup, i: Int, b: Boolean ->
-            if(b) {
-                when(i){
+            if (b) {
+                when (i) {
                     R.id.p1_button -> this.typeProfile = "p1"
                     R.id.p2_button -> this.typeProfile = "p2"
                     R.id.p3_button -> this.typeProfile = "p3"
@@ -116,9 +122,9 @@ class CalculatorFragment : Fragment() {
             }
         }
 
-        root.toggle_button_group_glass.addOnButtonCheckedListener{_: MaterialButtonToggleGroup, i: Int, b: Boolean ->
-            if(b){
-                when(i){
+        root.toggle_button_group_glass.addOnButtonCheckedListener { _: MaterialButtonToggleGroup, i: Int, b: Boolean ->
+            if (b) {
+                when (i) {
                     R.id.glass1_button -> this.typeGlass = "prOne"
                     R.id.glass2_button -> this.typeGlass = "prTwo"
                 }
@@ -126,9 +132,9 @@ class CalculatorFragment : Fragment() {
             }
         }
 
-        root.toggle_button_group_house.addOnButtonCheckedListener{_: MaterialButtonToggleGroup, i: Int, b: Boolean ->
-            if(b){
-                when(i){
+        root.toggle_button_group_house.addOnButtonCheckedListener { _: MaterialButtonToggleGroup, i: Int, b: Boolean ->
+            if (b) {
+                when (i) {
                     R.id.panel_button -> this.typeHome = "panel"
                     R.id.brick_button -> this.typeHome = "brick"
                 }
@@ -136,36 +142,49 @@ class CalculatorFragment : Fragment() {
             }
         }
 
-        root.toggle_button_group_options.addOnButtonCheckedListener{_: MaterialButtonToggleGroup, i: Int, b: Boolean ->
-            when(i){
-                R.id.options_grid_button-> this.isWinGrid = b
+        root.toggle_button_group_options.addOnButtonCheckedListener { _: MaterialButtonToggleGroup, i: Int, b: Boolean ->
+            when (i) {
+                R.id.options_grid_button -> this.isWinGrid = b
                 R.id.options_sill_button -> this.isWinSill = b
-                R.id.options_slope_button-> this.isWinSlope = b
+                R.id.options_slope_button -> this.isWinSlope = b
                 R.id.options_tide_button -> this.isWinTide = b
             }
             updateSummaryPrice(root)
         }
 
-        root.toggle_button_group_services.addOnButtonCheckedListener{_: MaterialButtonToggleGroup, i: Int, b: Boolean ->
-            when(i){
-                R.id.services_delivery_button-> this.isWinDelivery = b
+        root.toggle_button_group_services.addOnButtonCheckedListener { _: MaterialButtonToggleGroup, i: Int, b: Boolean ->
+            when (i) {
+                R.id.services_delivery_button -> this.isWinDelivery = b
                 R.id.services_montage_button -> this.isWinInstall = b
             }
             updateSummaryPrice(root)
         }
 
         root.add_cart_button.setOnClickListener {
-            val db = Room.databaseBuilder(
-                root.context.applicationContext,
-                ProductDatabase::class.java, "database-product"
-            ).build()
+            val db = ProductDatabase.getInstance(root.context)
 
-            // TODO: БД в другой поток
+            // TODO: Дурак, делай не в основном потоке, дурак, слыш
             db.productDao().insertAll(
-                Product(1, windowId, h, w, typeProfile, typeGlass,
-                typeHome, isWinSill, isWinTide, isWinSlope,
-                isWinGrid, isWinInstall, isWinDelivery, summaryPrice.sum,summaryPrice.sumW, summaryPrice.sumO, summaryPrice.sumM, summaryPrice.sumD))
-
+                Product(
+                    windowId,
+                    h,
+                    w,
+                    typeProfile,
+                    typeGlass,
+                    typeHome,
+                    isWinSill,
+                    isWinTide,
+                    isWinSlope,
+                    isWinGrid,
+                    isWinInstall,
+                    isWinDelivery,
+                    summaryPrice.sum,
+                    summaryPrice.sumW,
+                    summaryPrice.sumO,
+                    summaryPrice.sumM,
+                    summaryPrice.sumD
+                )
+            )
 
             Snackbar.make(root, "Товар был успешно добавлен в козину!", Snackbar.LENGTH_SHORT)
                 .setAnimationMode(Snackbar.ANIMATION_MODE_SLIDE)
@@ -174,7 +193,7 @@ class CalculatorFragment : Fragment() {
         return root
     }
 
-    private fun initSliderView(root : View) : SliderView{
+    private fun initSliderView(root: View): SliderView {
         // ==== Slider Settings ==== //
         val sliderView: SliderView = root.findViewById(R.id.imageSlider)
         val sliderAdapter = SliderAdapter(root.context, elements)
@@ -206,23 +225,25 @@ class CalculatorFragment : Fragment() {
     private lateinit var summaryPrice: Calculator.SummaryPrice
 
     // ==== Default Settings Window Calculator ==== //
-    private var h : Int = 0
-    private var w : Int = 0
-    private var windowId : String = "1-1"
-    private var typeProfile : String = "p1"
-    private var typeGlass : String = "prOne"
-    private var typeHome : String = "panel"
-    private var isWinSill : Boolean = false
-    private var isWinSlope : Boolean = false
-    private var isWinTide : Boolean = false
-    private var isWinGrid : Boolean = false
-    private var isWinInstall : Boolean = false
-    private var isWinDelivery : Boolean = false
+    private var h: Int = 0
+    private var w: Int = 0
+    private var windowId: String = "1-1"
+    private var typeProfile: String = "p1"
+    private var typeGlass: String = "prOne"
+    private var typeHome: String = "panel"
+    private var isWinSill: Boolean = false
+    private var isWinSlope: Boolean = false
+    private var isWinTide: Boolean = false
+    private var isWinGrid: Boolean = false
+    private var isWinInstall: Boolean = false
+    private var isWinDelivery: Boolean = false
     // ==== Default Settings Window Calculator ==== //
 
-    private fun updateSummaryPrice(root : View){
-        summaryPrice = Calculator().calculatePrice(currentWindow, h,w, typeProfile, typeGlass, typeHome, isWinSill, isWinTide,
-            isWinSlope, isWinGrid, isWinInstall, isWinDelivery)
+    private fun updateSummaryPrice(root: View) {
+        summaryPrice = Calculator().calculatePrice(
+            currentWindow, h, w, typeProfile, typeGlass, typeHome, isWinSill, isWinTide,
+            isWinSlope, isWinGrid, isWinInstall, isWinDelivery
+        )
 
         root.add_cart_button.text = "Общая стоимость: ${summaryPrice.sum} р."
         root.text_view_sumW.text = "Стоимость окна: ${summaryPrice.sumW} р."

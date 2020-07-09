@@ -7,10 +7,6 @@ import com.goga133.oknaservice.models.Office
 
 class ContactsViewModel : ViewModel() {
 
-    private val _text = MutableLiveData<String>().apply {
-        value = "Тут слайд с контактами"
-    }
-    val text: LiveData<String> = _text
 
     private val _arrayOffices = MutableLiveData<Array<Office>>().apply {
         value = arrayOf(

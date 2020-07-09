@@ -29,10 +29,7 @@ class LeadFragment : Fragment() {
             textView.text = it
         })
 
-        val db = Room.databaseBuilder(
-            root.context.applicationContext,
-            ProductDatabase::class.java, "database-products"
-        ).build()
+        val db = ProductDatabase.getInstance(root.context)
 
 
         Toast.makeText(root.context, "${db.productDao().getAll().size}", Toast.LENGTH_SHORT).show()

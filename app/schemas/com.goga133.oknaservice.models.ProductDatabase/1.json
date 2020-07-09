@@ -2,11 +2,11 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "c9c59ef1f81c9eed9ace5b6d06ddf014",
+    "identityHash": "34d9404b2265975ff13c542e6defe12d",
     "entities": [
       {
         "tableName": "Product",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`uid` INTEGER NOT NULL, `windowId` TEXT NOT NULL, `h` INTEGER NOT NULL, `w` INTEGER NOT NULL, `profile` TEXT NOT NULL, `glass` TEXT NOT NULL, `home` TEXT NOT NULL, `isWinSill` INTEGER NOT NULL, `isWinTide` INTEGER NOT NULL, `isWinSlope` INTEGER NOT NULL, `isWinGrid` INTEGER NOT NULL, `isWinInstall` INTEGER NOT NULL, `isWinDelivery` INTEGER NOT NULL, `priceSum` INTEGER NOT NULL, `priceW` INTEGER NOT NULL, `priceO` INTEGER NOT NULL, `priceM` INTEGER NOT NULL, `priceD` INTEGER NOT NULL, PRIMARY KEY(`uid`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`uid` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `windowId` TEXT NOT NULL, `h` INTEGER NOT NULL, `w` INTEGER NOT NULL, `profile` TEXT NOT NULL, `glass` TEXT NOT NULL, `home` TEXT NOT NULL, `isWinSill` INTEGER NOT NULL, `isWinTide` INTEGER NOT NULL, `isWinSlope` INTEGER NOT NULL, `isWinGrid` INTEGER NOT NULL, `isWinInstall` INTEGER NOT NULL, `isWinDelivery` INTEGER NOT NULL, `priceSum` INTEGER NOT NULL, `priceW` INTEGER NOT NULL, `priceO` INTEGER NOT NULL, `priceM` INTEGER NOT NULL, `priceD` INTEGER NOT NULL)",
         "fields": [
           {
             "fieldPath": "uid",
@@ -121,7 +121,7 @@
           "columnNames": [
             "uid"
           ],
-          "autoGenerate": false
+          "autoGenerate": true
         },
         "indices": [],
         "foreignKeys": []
@@ -130,7 +130,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'c9c59ef1f81c9eed9ace5b6d06ddf014')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '34d9404b2265975ff13c542e6defe12d')"
     ]
   }
 }
