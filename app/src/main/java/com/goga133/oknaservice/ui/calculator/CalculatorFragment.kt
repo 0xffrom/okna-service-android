@@ -157,14 +157,14 @@ class CalculatorFragment : Fragment() {
         root.add_cart_button.setOnClickListener {
             val db = Room.databaseBuilder(
                 root.context.applicationContext,
-                ProductDatabase::class.java, "database-products"
+                ProductDatabase::class.java, "database-product"
             ).build()
 
-            // TODO: Починить БД
+            // TODO: БД в другой поток
             db.productDao().insertAll(
                 Product(1, windowId, h, w, typeProfile, typeGlass,
                 typeHome, isWinSill, isWinTide, isWinSlope,
-                isWinGrid, isWinInstall, isWinDelivery, summaryPrice))
+                isWinGrid, isWinInstall, isWinDelivery, summaryPrice.sum,summaryPrice.sumW, summaryPrice.sumO, summaryPrice.sumM, summaryPrice.sumD))
 
 
             Snackbar.make(root, "Товар был успешно добавлен в козину!", Snackbar.LENGTH_SHORT)
