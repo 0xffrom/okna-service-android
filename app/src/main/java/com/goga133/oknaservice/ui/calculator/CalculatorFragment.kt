@@ -6,23 +6,25 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.Window
 import android.widget.Button
 import android.widget.SeekBar
 import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
-import com.goga133.oknaservice.Calculator
+import androidx.room.Room
+import com.goga133.oknaservice.models.Calculator
 import com.goga133.oknaservice.R
 import com.goga133.oknaservice.adapters.SliderAdapter
 import com.goga133.oknaservice.listeners.OnPageChangeListener
 import com.goga133.oknaservice.listeners.OnSeekBarChangeListener
+import com.goga133.oknaservice.models.Product
+import com.goga133.oknaservice.models.ProductDatabase
 import com.google.android.material.button.MaterialButtonToggleGroup
+import com.google.android.material.snackbar.Snackbar
 import com.smarteist.autoimageslider.IndicatorView.animation.type.IndicatorAnimationType
 import com.smarteist.autoimageslider.SliderAnimations
 import com.smarteist.autoimageslider.SliderView
-import kotlinx.android.synthetic.main.fragment_calculator.*
 import kotlinx.android.synthetic.main.fragment_calculator.view.*
 import kotlinx.android.synthetic.main.value_setter_dialog.*
 
@@ -35,7 +37,8 @@ class CalculatorFragment : Fragment() {
     private lateinit var widthTextView: TextView
     private lateinit var heightTextView: TextView
 
-    private var currentWindow: Calculator.Window = Calculator().chooseWindow("1-1")
+    private var currentWindow: Calculator.Window = Calculator()
+        .chooseWindow("1-1")
     private lateinit var elements: Array<SliderAdapter.SliderItem>
 
     override fun onCreateView(
@@ -151,8 +154,24 @@ class CalculatorFragment : Fragment() {
             updateSummaryPrice(root)
         }
 
-        return root
+        root.add_cart_button.setOnClickListener {
+            val db = Room.databaseBuilder(
+                root.context.applicationContext,
+                ProductDatabase::class.java, "database-products"
+            ).build()
 
+            // TODO: Починить БД
+            db.productDao().insertAll(
+                Product(1, windowId, h, w, typeProfile, typeGlass,
+                typeHome, isWinSill, isWinTide, isWinSlope,
+                isWinGrid, isWinInstall, isWinDelivery, summaryPrice))
+
+
+            Snackbar.make(root, "Товар был успешно добавлен в козину!", Snackbar.LENGTH_SHORT)
+                .setAnimationMode(Snackbar.ANIMATION_MODE_SLIDE)
+                .show()
+        }
+        return root
     }
 
     private fun initSliderView(root : View) : SliderView{
@@ -170,6 +189,7 @@ class CalculatorFragment : Fragment() {
             OnPageChangeListener(
                 fun(position: Int): Unit {
                     currentWindow = Calculator().chooseWindow(elements[position].windowId)
+                    windowId = elements[position].windowId
                     heightSeekBar.max = currentWindow.maxH - currentWindow.minH
                     widthSeekBar.max = currentWindow.maxW - currentWindow.minW
 
@@ -188,6 +208,7 @@ class CalculatorFragment : Fragment() {
     // ==== Default Settings Window Calculator ==== //
     private var h : Int = 0
     private var w : Int = 0
+    private var windowId : String = "1-1"
     private var typeProfile : String = "p1"
     private var typeGlass : String = "prOne"
     private var typeHome : String = "panel"
@@ -203,7 +224,7 @@ class CalculatorFragment : Fragment() {
         summaryPrice = Calculator().calculatePrice(currentWindow, h,w, typeProfile, typeGlass, typeHome, isWinSill, isWinTide,
             isWinSlope, isWinGrid, isWinInstall, isWinDelivery)
 
-        root.update_price_button.text = "Общая стоимость: ${summaryPrice.sum} р."
+        root.add_cart_button.text = "Общая стоимость: ${summaryPrice.sum} р."
         root.text_view_sumW.text = "Стоимость окна: ${summaryPrice.sumW} р."
         root.text_view_sumO.text = "Стоимость опций: ${summaryPrice.sumO} р."
         root.text_view_sumD.text = "Стоимость доставки: ${summaryPrice.sumD} р."

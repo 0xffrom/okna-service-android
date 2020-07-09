@@ -1,4 +1,4 @@
-package com.goga133.oknaservice.objects
+package com.goga133.oknaservice.models
 
 data class Office(
     val City: String,

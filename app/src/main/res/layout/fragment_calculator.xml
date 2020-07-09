@@ -13,7 +13,7 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="0.9"
-        app:layout_constraintBottom_toBottomOf="@id/update_price_button"
+        app:layout_constraintBottom_toBottomOf="@id/add_cart_button"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -358,26 +358,16 @@
                 android:textSize="16sp"
                 android:textStyle="bold" />
 
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/add_cart_button"
-                style="@style/Widget.MaterialComponents.Button.UnelevatedButton"
-                app:icon="@drawable/ic_menu_cart"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_margin="5dp"
-                android:text="Добавить в козину" />
-
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
 
     <com.google.android.material.button.MaterialButton
-        android:id="@+id/update_price_button"
+        android:id="@+id/add_cart_button"
         android:layout_width="wrap_content"
         android:layout_height="50dp"
         android:layout_gravity="center"
         android:gravity="center"
-        app:icon="@drawable/ic_refresh"
+        app:icon="@drawable/ic_menu_cart"
         app:layout_constraintBottom_toBottomOf="@+id/nestedScrollView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />

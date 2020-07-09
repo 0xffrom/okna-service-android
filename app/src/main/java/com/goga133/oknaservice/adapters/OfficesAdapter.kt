@@ -10,7 +10,7 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.goga133.oknaservice.R
-import com.goga133.oknaservice.objects.Office
+import com.goga133.oknaservice.models.Office
 import kotlinx.android.synthetic.main.adapter_office.view.*
 
 

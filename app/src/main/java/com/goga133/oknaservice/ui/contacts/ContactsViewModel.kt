@@ -3,7 +3,7 @@ package com.goga133.oknaservice.ui.contacts
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.goga133.oknaservice.objects.Office
+import com.goga133.oknaservice.models.Office
 
 class ContactsViewModel : ViewModel() {
 

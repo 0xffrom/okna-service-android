@@ -5,10 +5,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import androidx.room.Room
 import com.goga133.oknaservice.R
+import com.goga133.oknaservice.models.ProductDatabase
 
 class LeadFragment : Fragment() {
 
@@ -26,6 +29,13 @@ class LeadFragment : Fragment() {
             textView.text = it
         })
 
+        val db = Room.databaseBuilder(
+            root.context.applicationContext,
+            ProductDatabase::class.java, "database-products"
+        ).build()
+
+
+        Toast.makeText(root.context, "${db.productDao().getAll().size}", Toast.LENGTH_SHORT).show()
 
         return root
     }
