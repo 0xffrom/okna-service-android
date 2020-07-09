@@ -1,25 +1,23 @@
 package com.goga133.oknaservice.adapters
 
 import android.content.Context
-import android.database.DataSetObserver
 import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
-import android.widget.Toast
 import com.bumptech.glide.Glide
 import com.goga133.oknaservice.R
-import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
-import com.smarteist.autoimageslider.SliderPager
 import com.smarteist.autoimageslider.SliderViewAdapter
 
-class SliderAdapter(private val context: Context, elements: Array<SliderItem>) : SliderViewAdapter<SliderAdapter.SliderAdapterVH>() {
+class SliderAdapter(private val context: Context, elements: Array<SliderItem>) :
+    SliderViewAdapter<SliderAdapter.SliderAdapterVH>() {
     private var mSliderItems: Array<SliderItem> = elements
 
     override fun onCreateViewHolder(parent: ViewGroup): SliderAdapterVH {
-        val inflate = LayoutInflater.from(parent.context).inflate(R.layout.image_slider, parent,false)
+        val inflate =
+            LayoutInflater.from(parent.context).inflate(R.layout.image_slider, parent, false)
         return SliderAdapterVH(inflate)
     }
 
@@ -46,5 +44,5 @@ class SliderAdapter(private val context: Context, elements: Array<SliderItem>) :
     }
 
 
-    data class SliderItem(val image : Int, val windowId : String, val description: String? = null)
+    data class SliderItem(val image: Int, val windowId: String, val description: String? = null)
 }

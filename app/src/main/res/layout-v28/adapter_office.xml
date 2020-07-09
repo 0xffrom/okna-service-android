@@ -5,16 +5,19 @@
     android:padding="6dp"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
+
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         card_view:cardCornerRadius="32dp"
         card_view:cardBackgroundColor="@color/colorPrimaryDark"
         android:layout_height="wrap_content">
+
         <LinearLayout
             android:layout_width="match_parent"
             android:orientation="vertical"
             android:padding="2dp"
             android:layout_height="wrap_content">
+
             <TextView
                 android:id="@+id/text_view_city"
                 android:layout_width="match_parent"
@@ -23,7 +26,8 @@
                 android:gravity="center"
                 android:textSize="30sp"
                 android:textStyle="bold"
-                android:textColor="#FFFFFF"/>
+                android:textColor="#FFFFFF" />
+
             <TextView
                 android:id="@+id/text_view_appointment"
                 android:layout_width="match_parent"
@@ -31,17 +35,20 @@
                 android:gravity="center"
                 android:textStyle="bold"
                 android:textSize="16sp"
-                android:textColor="#FFFFFF"/>
+                android:textColor="#FFFFFF" />
+
             <LinearLayout
                 android:id="@+id/layout_address"
                 android:layout_width="match_parent"
                 android:padding="10dp"
                 android:layout_height="wrap_content">
+
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:background="@drawable/ic_menu_map"
-                    android:layout_gravity="center"/>
+                    android:layout_gravity="center" />
+
                 <TextView
                     android:layout_gravity="center"
                     android:layout_width="wrap_content"
@@ -51,6 +58,7 @@
                     android:textColor="#FFFFFF"
                     android:textSize="16sp"
                     android:textStyle="bold" />
+
                 <TextView
                     android:id="@+id/text_view_address"
                     android:layout_width="match_parent"
@@ -61,17 +69,20 @@
                     android:textSize="16sp"
                     android:textStyle="italic" />
             </LinearLayout>
+
             <LinearLayout
                 android:id="@+id/layout_telephone"
                 android:layout_width="match_parent"
                 android:padding="10dp"
                 android:layout_height="wrap_content">
+
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:background="@drawable/ic_toolbar_call"
                     android:layout_gravity="center"
                     tools:layout_editor_absoluteX="10dp" />
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -81,6 +92,7 @@
                     android:layout_gravity="center"
                     android:textSize="16sp"
                     android:textStyle="bold" />
+
                 <TextView
                     android:id="@+id/text_view_telephone"
                     android:layout_width="match_parent"
@@ -89,19 +101,22 @@
                     android:gravity="end"
                     android:textColor="#FFFFFF"
                     android:textSize="16sp"
-                    android:textStyle="italic"/>
+                    android:textStyle="italic" />
             </LinearLayout>
+
             <LinearLayout
                 android:id="@+id/layout_mail"
                 android:layout_width="match_parent"
                 android:padding="10dp"
                 android:layout_height="wrap_content">
+
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:background="@drawable/ic_menu_mail"
                     android:layout_gravity="center"
                     tools:layout_editor_absoluteX="10dp" />
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -111,6 +126,7 @@
                     android:layout_gravity="center"
                     android:textSize="16sp"
                     android:textStyle="bold" />
+
                 <TextView
                     android:id="@+id/text_view_mail"
                     android:layout_width="match_parent"
@@ -119,18 +135,21 @@
                     android:gravity="end"
                     android:textColor="#FFFFFF"
                     android:textSize="16sp"
-                    android:textStyle="italic"/>
+                    android:textStyle="italic" />
             </LinearLayout>
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:padding="10dp"
                 android:layout_height="wrap_content">
+
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:background="@drawable/ic_time"
                     android:layout_gravity="center"
                     tools:layout_editor_absoluteX="10dp" />
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -140,6 +159,7 @@
                     android:layout_gravity="center"
                     android:textSize="16sp"
                     android:textStyle="bold" />
+
                 <TextView
                     android:id="@+id/text_view_time"
                     android:layout_width="match_parent"
@@ -148,8 +168,8 @@
                     android:gravity="end"
                     android:textColor="#FFFFFF"
                     android:textSize="16sp"
-                    android:textStyle="italic"/>
+                    android:textStyle="italic" />
             </LinearLayout>
-    </LinearLayout>
+        </LinearLayout>
     </androidx.cardview.widget.CardView>
 </LinearLayout>

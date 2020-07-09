@@ -7,7 +7,7 @@ class OnPageChangeListener(val callback: (Int) -> Unit) : SliderPager.OnPageChan
     override fun onPageScrollStateChanged(state: Int) {}
     override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {}
 
-    override fun onPageSelected(position: Int)  {
+    override fun onPageSelected(position: Int) {
         callback(position)
     }
 
