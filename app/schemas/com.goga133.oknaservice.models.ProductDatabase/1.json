@@ -2,11 +2,11 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "7b19f71cc7ddeffc3ebb6397386626a9",
+    "identityHash": "6b43c202733b1e11bb2372d175f7ae6e",
     "entities": [
       {
         "tableName": "Product",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`uid` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `windowId` TEXT NOT NULL, `windowIdResource` INTEGER NOT NULL, `h` INTEGER NOT NULL, `w` INTEGER NOT NULL, `profile` TEXT NOT NULL, `glass` TEXT NOT NULL, `home` TEXT NOT NULL, `isWinSill` INTEGER NOT NULL, `isWinTide` INTEGER NOT NULL, `isWinSlope` INTEGER NOT NULL, `isWinGrid` INTEGER NOT NULL, `isWinInstall` INTEGER NOT NULL, `isWinDelivery` INTEGER NOT NULL, `priceSum` INTEGER NOT NULL, `priceW` INTEGER NOT NULL, `priceO` INTEGER NOT NULL, `priceM` INTEGER NOT NULL, `priceD` INTEGER NOT NULL)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`uid` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `windowId` TEXT, `windowIdResource` INTEGER NOT NULL, `h` INTEGER NOT NULL, `w` INTEGER NOT NULL, `profile` TEXT, `glass` TEXT, `home` TEXT, `isWinSill` INTEGER NOT NULL, `isWinTide` INTEGER NOT NULL, `isWinSlope` INTEGER NOT NULL, `isWinGrid` INTEGER NOT NULL, `isWinInstall` INTEGER NOT NULL, `isWinDelivery` INTEGER NOT NULL, `priceSum` INTEGER NOT NULL, `priceW` INTEGER NOT NULL, `priceO` INTEGER NOT NULL, `priceM` INTEGER NOT NULL, `priceD` INTEGER NOT NULL)",
         "fields": [
           {
             "fieldPath": "uid",
@@ -18,7 +18,7 @@
             "fieldPath": "windowId",
             "columnName": "windowId",
             "affinity": "TEXT",
-            "notNull": true
+            "notNull": false
           },
           {
             "fieldPath": "windowIdResource",
@@ -42,19 +42,19 @@
             "fieldPath": "profile",
             "columnName": "profile",
             "affinity": "TEXT",
-            "notNull": true
+            "notNull": false
           },
           {
             "fieldPath": "glass",
             "columnName": "glass",
             "affinity": "TEXT",
-            "notNull": true
+            "notNull": false
           },
           {
             "fieldPath": "home",
             "columnName": "home",
             "affinity": "TEXT",
-            "notNull": true
+            "notNull": false
           },
           {
             "fieldPath": "isWinSill",
@@ -136,7 +136,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '7b19f71cc7ddeffc3ebb6397386626a9')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '6b43c202733b1e11bb2372d175f7ae6e')"
     ]
   }
 }

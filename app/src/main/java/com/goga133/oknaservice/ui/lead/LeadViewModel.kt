@@ -13,4 +13,7 @@ class LeadViewModel(application: Application) : AndroidViewModel(application) {
 
     fun getProducts() = dao.getAll()
 
+    fun deleteProduct(product: Product) = viewModelScope.launch(Dispatchers.IO) {
+        dao.delete(product)
+    }
 }

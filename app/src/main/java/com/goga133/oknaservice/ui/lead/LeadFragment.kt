@@ -10,11 +10,13 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.room.Room
 import com.goga133.oknaservice.R
 import com.goga133.oknaservice.adapters.OfficesAdapter
 import com.goga133.oknaservice.adapters.ProductsAdapter
+import com.goga133.oknaservice.models.Product
 import com.goga133.oknaservice.models.ProductDatabase
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.fragment_contacts.view.*
@@ -39,7 +41,8 @@ class LeadFragment : Fragment() {
 
             layoutManager = viewManager
 
-            leadViewModel.getProducts().observe(viewLifecycleOwner, Observer { adapter = ProductsAdapter(it, context)})
+            leadViewModel.getProducts().observe(viewLifecycleOwner, Observer { adapter = ProductsAdapter(
+                it as ArrayList<Product>, context, leadViewModel)})
 
         }
 

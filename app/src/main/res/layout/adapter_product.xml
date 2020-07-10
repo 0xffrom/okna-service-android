@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     app:cardCornerRadius="3dp"
@@ -11,26 +12,27 @@
         android:padding="5dp"
         android:layout_height="wrap_content">
 
-        <LinearLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:padding="5dp"
             android:layout_weight="0.5"
             android:layout_width="0dp"
             android:orientation="vertical"
             android:layout_height="wrap_content">
+
             <ImageView
                 android:id="@+id/image_product"
                 android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 android:padding="5dp"
-                android:layout_height="wrap_content" />
+                app:layout_constraintTop_toTopOf="parent" />
+
             <com.google.android.material.button.MaterialButton
+                android:id="@+id/button_delete_product"
                 android:layout_width="match_parent"
-                android:text="Редактировать"
-                android:layout_height="wrap_content"/>
-            <com.google.android.material.button.MaterialButton
-                android:layout_width="match_parent"
-                android:text="Удалить из корзины"
-                android:layout_height="wrap_content"/>
-        </LinearLayout>
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@id/image_product"
+                android:text="Удалить из корзины" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
         <TextView
             android:id="@+id/description_product"
             android:layout_weight="0.5"
@@ -38,7 +40,7 @@
             android:layout_width="0dp"
             android:textStyle="bold"
             android:autoSizeTextType="uniform"
-            android:layout_height="match_parent"/>
+            android:layout_height="wrap_content"/>
 
     </LinearLayout>
 </androidx.cardview.widget.CardView>

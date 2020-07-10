@@ -16,8 +16,6 @@ class CalculatorViewModel(application: Application) : AndroidViewModel(applicati
 
     private val dao = ProductDatabase.getInstance(application).productDao()
 
-    fun getProducts() = dao.getAll()
-
     fun insertProduct(product: Product) = viewModelScope.launch(Dispatchers.IO) {
         dao.insert(product)
     }
