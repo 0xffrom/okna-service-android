@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.room.Room
@@ -29,10 +30,9 @@ class LeadFragment : Fragment() {
             textView.text = it
         })
 
-        val db = ProductDatabase.getInstance(root.context)
-
-
-        Toast.makeText(root.context, "${db.productDao().getAll().size}", Toast.LENGTH_SHORT).show()
+        Toast.makeText(root.context, "${leadViewModel.getProduct().observe(viewLifecycleOwner, Observer{
+            val size = it.size
+        })}", Toast.LENGTH_SHORT).show()
 
         return root
     }

@@ -1,12 +1,28 @@
 package com.goga133.oknaservice.ui.calculator
 
+import android.app.Application
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.goga133.oknaservice.R
 import com.goga133.oknaservice.adapters.SliderAdapter
+import com.goga133.oknaservice.models.Product
+import com.goga133.oknaservice.models.ProductDatabase
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
-class CalculatorViewModel : ViewModel() {
+class CalculatorViewModel(application: Application) : AndroidViewModel(application) {
+
+    private val dao = ProductDatabase.getInstance(application).productDao()
+
+    fun getProduct() = viewModelScope.launch(Dispatchers.IO) {
+        dao.getAll()
+    }
+
+    fun insertProduct(product: Product) = viewModelScope.launch(Dispatchers.IO) {
+        dao.insertAll(product)
+    }
 
     private val _arraySliders = MutableLiveData<Array<SliderAdapter.SliderItem>>().apply {
         value = arrayOf(
@@ -122,4 +138,9 @@ class CalculatorViewModel : ViewModel() {
     }
 
     val arraySliders: LiveData<Array<SliderAdapter.SliderItem>> = _arraySliders
+
+
+
+
+
 }

@@ -16,7 +16,7 @@ abstract class ProductDatabase : RoomDatabase() {
             return Room.databaseBuilder(
                 context.applicationContext,
                 ProductDatabase::class.java, "database-product"
-            ).allowMainThreadQueries().build()
+            ).build()
             // TODO: КАКОЙ МЕЙН ПОТОК, УБИРАЙ, ДУРАК
         }
     }
