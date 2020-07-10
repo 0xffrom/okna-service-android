@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.goga133.oknaservice.R
 import com.goga133.oknaservice.adapters.OfficesAdapter
+import kotlinx.android.synthetic.main.fragment_contacts.view.*
 
 class ContactsFragment : Fragment() {
 
@@ -25,7 +26,7 @@ class ContactsFragment : Fragment() {
         val root = inflater.inflate(R.layout.fragment_contacts, container, false)
         val viewManager = LinearLayoutManager(root.context)
 
-        root.findViewById<RecyclerView>(R.id.list_offices).apply {
+        root.list_offices.apply {
 
             setHasFixedSize(true)
 

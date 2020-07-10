@@ -10,6 +10,7 @@ import android.widget.SeekBar
 import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.goga133.oknaservice.R
@@ -66,6 +67,7 @@ class CalculatorFragment : Fragment() {
             }
             updateSummaryPrice(root)
         })
+
 
         heightSeekBar.setOnSeekBarChangeListener(listener)
         widthSeekBar.setOnSeekBarChangeListener(listener)
@@ -127,6 +129,7 @@ class CalculatorFragment : Fragment() {
             calculatorViewModel.insertProduct(
                 Product(
                     windowId,
+                    elements.first { x -> x.windowId == windowId }.image,
                     h,
                     w,
                     typeProfile,

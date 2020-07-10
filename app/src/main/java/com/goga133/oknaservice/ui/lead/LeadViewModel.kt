@@ -1,22 +1,16 @@
 package com.goga133.oknaservice.ui.lead
 
 import android.app.Application
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
+import androidx.lifecycle.*
 import com.goga133.oknaservice.models.Product
 import com.goga133.oknaservice.models.ProductDatabase
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
-class LeadViewModel(application: Application) : ViewModel() {
+class LeadViewModel(application: Application) : AndroidViewModel(application) {
 
-    private val productDatabase : ProductDatabase = ProductDatabase.getInstance(application)
-    private val products : LiveData<List<Product>> = productDatabase.productDao().getAll()
+    private val dao = ProductDatabase.getInstance(application).productDao()
 
-    fun getProduct() = products
+    fun getProducts() = dao.getAll()
 
-
-    private val _text = MutableLiveData<String>().apply {
-        value = "Оформление заказа"
-    }
-    val text: LiveData<String> = _text
 }

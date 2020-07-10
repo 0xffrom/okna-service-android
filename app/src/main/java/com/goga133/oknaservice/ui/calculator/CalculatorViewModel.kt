@@ -16,12 +16,10 @@ class CalculatorViewModel(application: Application) : AndroidViewModel(applicati
 
     private val dao = ProductDatabase.getInstance(application).productDao()
 
-    fun getProduct() = viewModelScope.launch(Dispatchers.IO) {
-        dao.getAll()
-    }
+    fun getProducts() = dao.getAll()
 
     fun insertProduct(product: Product) = viewModelScope.launch(Dispatchers.IO) {
-        dao.insertAll(product)
+        dao.insert(product)
     }
 
     private val _arraySliders = MutableLiveData<Array<SliderAdapter.SliderItem>>().apply {

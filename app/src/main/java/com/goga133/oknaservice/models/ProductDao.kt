@@ -12,7 +12,7 @@ interface ProductDao {
     fun getAll(): LiveData<List<Product>>
 
     @Insert
-    fun insertAll(vararg products: Product)
+    fun insert(product: Product)
 
     @Delete
     fun delete(product: Product)

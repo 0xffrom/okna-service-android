@@ -13,7 +13,7 @@ import com.goga133.oknaservice.models.Product
 import kotlinx.android.synthetic.main.adapter_product.view.*
 
 
-class ProductsAdapter(private val array_products: Array<Product>, private val context: Context) :
+class ProductsAdapter(private val array_products: List<Product>, private val context: Context) :
     RecyclerView.Adapter<ProductsAdapter.ProductHolder>() {
 
     class ProductHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -23,14 +23,15 @@ class ProductsAdapter(private val array_products: Array<Product>, private val co
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ProductHolder {
         val itemView =
-            LayoutInflater.from(parent.context).inflate(R.layout.adapter_office, parent, false)
+            LayoutInflater.from(parent.context).inflate(R.layout.adapter_product, parent, false)
         return ProductHolder(itemView)
     }
 
     override fun onBindViewHolder(holder: ProductHolder, position: Int) {
         Glide.with(holder.itemView)
-            .load(context.resources.getDrawable(context.resources.getIdentifier("window${array_products[position].windowId}", "drawable", context.packageName)))
+            .load(array_products[position].windowIdResource)
             .into(holder.imageView)
+        holder.description.text = array_products[position].toString()
     }
 
 

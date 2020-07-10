@@ -15,9 +15,8 @@ abstract class ProductDatabase : RoomDatabase() {
         fun getInstance(context: Context): ProductDatabase {
             return Room.databaseBuilder(
                 context.applicationContext,
-                ProductDatabase::class.java, "database-product"
+                ProductDatabase::class.java, "products"
             ).build()
-            // TODO: КАКОЙ МЕЙН ПОТОК, УБИРАЙ, ДУРАК
         }
     }
 }

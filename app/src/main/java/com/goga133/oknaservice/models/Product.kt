@@ -8,6 +8,7 @@ import androidx.room.PrimaryKey
 @Entity
 data class Product(
     val windowId: String,
+    val windowIdResource : Int,
     val h: Int,
     val w: Int,
     val profile: String,
@@ -26,13 +27,14 @@ data class Product(
     val priceD: Int
 ) {
     constructor(
-        uid: Int, windowId: String, h: Int, w: Int, profile: String,
+        uid: Int, windowId: String, windowIdResource : Int, h: Int, w: Int, profile: String,
         glass: String, home: String, isWinSill: Boolean, isWinTide: Boolean,
         isWinSlope: Boolean, isWinGrid: Boolean, isWinInstall: Boolean,
         isWinDelivery: Boolean, priceSum: Int, priceW: Int, priceO: Int,
         priceM: Int, priceD: Int
     ) : this(
         windowId,
+        windowIdResource,
         h,
         w,
         profile,
