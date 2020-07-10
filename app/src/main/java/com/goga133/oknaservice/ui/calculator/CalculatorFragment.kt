@@ -45,6 +45,7 @@ class CalculatorFragment : Fragment() {
         val root = inflater.inflate(R.layout.fragment_calculator, container, false)
         val calculatorViewModel = ViewModelProvider(this)[CalculatorViewModel::class.java]
 
+        // TODO: Добавить биндинги.
         widthSeekBar = root.seekBar_width
         heightSeekBar = root.seekBar_height
         widthTextView = root.text_view_bar_width
@@ -52,7 +53,7 @@ class CalculatorFragment : Fragment() {
 
         val elements = calculatorViewModel.arraySliders.value ?: arrayOf()
 
-        OnSeekBarChangeListener(fun(seekBar: SeekBar?, progress: Int): Unit {
+        val listener = OnSeekBarChangeListener(fun(seekBar: SeekBar?, progress: Int): Unit {
             when (seekBar) {
                 widthSeekBar -> {
                     widthTextView.text = "Длина: ${progress + (currentWindow.minW)} см."
@@ -64,12 +65,10 @@ class CalculatorFragment : Fragment() {
                 }
             }
             updateSummaryPrice(root)
-        }).let { x ->
-            {
-                heightSeekBar.setOnSeekBarChangeListener(x)
-                widthSeekBar.setOnSeekBarChangeListener(x)
-            }
-        }
+        })
+
+        heightSeekBar.setOnSeekBarChangeListener(listener)
+        widthSeekBar.setOnSeekBarChangeListener(listener)
 
         setSliderBar(root, elements)
 

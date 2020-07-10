@@ -139,8 +139,4 @@ class CalculatorViewModel(application: Application) : AndroidViewModel(applicati
 
     val arraySliders: LiveData<Array<SliderAdapter.SliderItem>> = _arraySliders
 
-
-
-
-
 }
