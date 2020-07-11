@@ -121,7 +121,7 @@ data class Product(
                 "Откосы: ${getRusBool(isWinSlope)}.\n" +
                 "Москитная сетка: ${getRusBool(isWinGrid)}.\n" +
                 "Монтажные работы: ${getRusBool(isWinInstall)}.\n" +
-                "Доставка: ${getRusBool(isWinInstall)}.\n" +
+                "Доставка: ${getRusBool(isWinDelivery)}.\n" +
                 "Рассчитанная стоимость:\n" +
                 "Окно: $priceW р.\n" +
                 "Дополнительные опции: $priceO р.\n" +

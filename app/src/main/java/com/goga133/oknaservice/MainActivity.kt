@@ -13,6 +13,7 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
+import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.navigation.NavigationView
 
@@ -40,7 +41,7 @@ class MainActivity : AppCompatActivity() {
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
 
-        val fab: FloatingActionButton = findViewById(R.id.fab)
+        val fab: ExtendedFloatingActionButton = findViewById(R.id.fab)
         fab.setOnClickListener {
             if (navController.currentDestination?.id != R.id.nav_calculator)
                 navController.navigate(R.id.nav_calculator)
@@ -50,7 +51,7 @@ class MainActivity : AppCompatActivity() {
 
         navController.addOnDestinationChangedListener { controller, destination, arguments ->
             run {
-                if (destination.id == R.id.nav_calculator)
+                if (destination.id == R.id.nav_calculator || destination.id == R.id.nav_lead)
                     fab.hide()
                 else
                     fab.show()

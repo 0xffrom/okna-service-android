@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.goga133.oknaservice.R
+import com.goga133.oknaservice.models.Calculator
 import com.goga133.oknaservice.models.Product
 import com.goga133.oknaservice.ui.lead.LeadViewModel
 import com.google.android.material.snackbar.Snackbar
@@ -29,7 +30,6 @@ class ProductsAdapter(
         val imageView: ImageView = itemView.image_product
         val description: TextView = itemView.description_product
         val deleteProductButton: Button = itemView.button_delete_product
-
     }
 
     class DiffCallback : DiffUtil.ItemCallback<Product>(){
@@ -42,9 +42,11 @@ class ProductsAdapter(
         }
 
     }
+
     fun getProductAt(position : Int) : Product{
         return getItem(position)
     }
+
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ProductHolder {
         val itemView =
@@ -60,7 +62,7 @@ class ProductsAdapter(
         holder.deleteProductButton.setOnClickListener(OnClickRemoveItem(leadViewModel, getItem(position)))
     }
 
-    class OnClickRemoveItem(private val leadViewModel: LeadViewModel, val item : Product) : View.OnClickListener{
+    class OnClickRemoveItem(private val leadViewModel: LeadViewModel, private val item : Product) : View.OnClickListener{
         override fun onClick(v: View?) {
             if (v != null) {
                 Snackbar.make(v, "Выбранное окно успешно убрано из корзины!", Snackbar.LENGTH_LONG).show()

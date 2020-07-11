@@ -25,16 +25,16 @@
                 android:layout_marginBottom="10dp" />
 
             <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/isDelivery_textView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Доставка: Требуется."
                 app:autoSizeTextType="uniform" />
 
             <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/sum_textView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="10dp"
-                android:text="Итоговая стоимость: 5231 рублей"
                 app:autoSizeTextType="uniform" />
 
             <com.google.android.material.textfield.TextInputLayout
@@ -113,4 +113,12 @@
                 android:text="Отправить заявку" />
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/cart_null_textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:textSize="18sp"
+        android:text="Корзина пуста"/>
 </LinearLayout>

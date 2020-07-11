@@ -11,24 +11,19 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.viewModelScope
 import com.goga133.oknaservice.R
 import com.goga133.oknaservice.adapters.SliderAdapter
 import com.goga133.oknaservice.listeners.OnPageChangeListener
 import com.goga133.oknaservice.listeners.OnSeekBarChangeListener
 import com.goga133.oknaservice.models.Calculator
 import com.goga133.oknaservice.models.Product
-import com.google.android.material.button.MaterialButton
 import com.google.android.material.button.MaterialButtonToggleGroup
 import com.google.android.material.snackbar.Snackbar
 import com.smarteist.autoimageslider.IndicatorView.animation.type.IndicatorAnimationType
 import com.smarteist.autoimageslider.SliderAnimations
 import com.smarteist.autoimageslider.SliderView
-import kotlinx.android.synthetic.main.fragment_calculator.*
 import kotlinx.android.synthetic.main.fragment_calculator.view.*
 import kotlinx.android.synthetic.main.value_setter_dialog.*
-import kotlinx.coroutines.async
-import kotlinx.coroutines.launch
 
 
 class CalculatorFragment : Fragment() {
@@ -199,32 +194,36 @@ class CalculatorFragment : Fragment() {
         }
     }
 
-    private fun setSliderBar(root: View, elements : Array<SliderAdapter.SliderItem>, calculatorViewModel: CalculatorViewModel) =
-        calculatorViewModel.viewModelScope.launch {
-            val sliderView: SliderView = root.imageSlider
-            val sliderAdapter = SliderAdapter(root.context, elements)
-            sliderView.setSliderAdapter(sliderAdapter)
-            sliderView.setIndicatorAnimation(IndicatorAnimationType.WORM)
-            sliderView.setSliderTransformAnimation(SliderAnimations.SIMPLETRANSFORMATION)
-            sliderView.isAutoCycle = false
-            sliderView.indicatorRadius = 1
-            sliderView.indicatorSelectedColor = Color.WHITE
-            sliderView.indicatorUnselectedColor = Color.GRAY
-            sliderView.sliderPager.addOnPageChangeListener(
-                OnPageChangeListener(
-                    fun(position: Int): Unit {
-                        currentWindow = Calculator().chooseWindow(elements[position].windowId)
-                        windowId = elements[position].windowId
-                        heightSeekBar.max = currentWindow.maxH - currentWindow.minH
-                        widthSeekBar.max = currentWindow.maxW - currentWindow.minW
+    private fun setSliderBar(
+        root: View,
+        elements: Array<SliderAdapter.SliderItem>,
+        calculatorViewModel: CalculatorViewModel
+    ) = {
+        ->
+        val sliderView: SliderView = root.imageSlider
+        val sliderAdapter = SliderAdapter(root.context, elements)
+        sliderView.setSliderAdapter(sliderAdapter)
+        sliderView.setIndicatorAnimation(IndicatorAnimationType.WORM)
+        sliderView.setSliderTransformAnimation(SliderAnimations.SIMPLETRANSFORMATION)
+        sliderView.isAutoCycle = false
+        sliderView.indicatorRadius = 1
+        sliderView.indicatorSelectedColor = Color.WHITE
+        sliderView.indicatorUnselectedColor = Color.GRAY
+        sliderView.sliderPager.addOnPageChangeListener(
+            OnPageChangeListener(
+                fun(position: Int): Unit {
+                    currentWindow = Calculator().chooseWindow(elements[position].windowId)
+                    windowId = elements[position].windowId
+                    heightSeekBar.max = currentWindow.maxH - currentWindow.minH
+                    widthSeekBar.max = currentWindow.maxW - currentWindow.minW
 
-                        heightSeekBar.progress = 0
-                        widthSeekBar.progress = 0
-                    }
-                )
+                    heightSeekBar.progress = 0
+                    widthSeekBar.progress = 0
+                }
             )
-            sliderView.currentPagePosition = 0
-        }
+        )
+        sliderView.currentPagePosition = 0
+    }
 
 
     private lateinit var summaryPrice: Calculator.SummaryPrice
