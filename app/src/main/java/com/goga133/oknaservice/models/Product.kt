@@ -126,7 +126,7 @@ data class Product(
                 "Окно: $priceW р.\n" +
                 "Дополнительные опции: $priceO р.\n" +
                 "Монтаж: $priceM р.\n" +
-                "Итог: $priceSum р."
+                "Итог (без доставки): $priceSum р."
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
         parcel.writeString(windowId)

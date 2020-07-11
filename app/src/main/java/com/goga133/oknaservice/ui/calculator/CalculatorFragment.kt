@@ -152,7 +152,6 @@ class CalculatorFragment : Fragment() {
             )
 
             Snackbar.make(root, "Товар был успешно добавлен в козину!", Snackbar.LENGTH_SHORT)
-                .setAnimationMode(Snackbar.ANIMATION_MODE_SLIDE)
                 .show()
         }
 
