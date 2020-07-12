@@ -1,11 +1,11 @@
 package com.goga133.oknaservice.ui.lead
 
 import android.app.AlertDialog
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
@@ -20,6 +20,8 @@ import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.fragment_lead.view.*
 import kotlinx.android.synthetic.main.send_mail_dialog.*
 import kotlinx.android.synthetic.main.value_setter_dialog.*
+import java.lang.StringBuilder
+
 
 class LeadFragment : Fragment() {
 
@@ -105,11 +107,44 @@ class LeadFragment : Fragment() {
             }
 
             mAlertDialog.send_mail_by_user_button.setOnClickListener {
-                // Открытие нового окошка
+                // Открытие почтового сервиса:
+                val email = Intent(Intent.ACTION_SEND)
+                email.putExtra(Intent.EXTRA_EMAIL, arrayOf("os@okna-servise.com"))
+                email.putExtra(Intent.EXTRA_SUBJECT, "Бизнес заявка")
+                email.putExtra(Intent.EXTRA_TEXT, "")
+                email.type = "plain/text";
+
+                startActivity(Intent.createChooser(email, "Выберите почтовую программу:"))
+
             }
         }
 
         return root
+    }
+
+    private fun getMailText(adapter: ProductsAdapter, name : String?, email : String?, phoneNumber : String?, address : String?, comment : String?) : String {
+        val stringBuilder = StringBuilder()
+
+        if (!name.isNullOrEmpty()) stringBuilder.append("Имя: $name.\n")
+        if (!email.isNullOrEmpty()) stringBuilder.append("Почта: $email.\n")
+        if (!phoneNumber.isNullOrEmpty()) stringBuilder.append("Телефон: $phoneNumber.\n")
+
+        stringBuilder.append("Заказ:\n")
+        val elements = adapter.getElements()
+        for (i in elements.indices){
+            stringBuilder.append("\n ===== №${i+1} =====")
+            stringBuilder.append(elements[i])
+            stringBuilder.append(" ===== №${i+1} =====\n")
+        }
+
+        if (!address.isNullOrEmpty())
+            stringBuilder.append("Доставка по адресу: $address.\n")
+        else
+            stringBuilder.append("Доставка не требуется.\n")
+
+        stringBuilder.append("Автоматически высчитаная стоимость с учётом доставки:\n${getProductsSum(elements)}")
+        if (!comment.isNullOrEmpty()) stringBuilder.append("Дополнительный комментарий клиента: $comment.")
+        return stringBuilder.toString()
     }
 
     private fun getProductsDelivery(products: List<Product>): Boolean {

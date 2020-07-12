@@ -47,6 +47,9 @@ class ProductsAdapter(
         return getItem(position)
     }
 
+    fun getElements(): MutableList<Product> {
+        return currentList
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ProductHolder {
         val itemView =
