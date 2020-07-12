@@ -125,10 +125,11 @@ class LeadFragment : Fragment() {
 
                     // TODO: Подрубить API для отправки.
 
-                    if (mAlertDialog.is_delete_cart_checkBox.isChecked) {
+                    Snackbar.make(root, "К сожалению, отправка в автоматическом режиме сейчас не работает :(", Snackbar.LENGTH_SHORT).show()
+/*                    if (mAlertDialog.is_delete_cart_checkBox.isChecked) {
                         // Очищение корзины
                         leadViewModel.deleteAllProduct()
-                    }
+                    }*/
                 }
 
                 mAlertDialog.send_mail_by_user_button.setOnClickListener {
