@@ -195,9 +195,9 @@ class LeadFragment : Fragment() {
             stringBuilder.append("Доставка не требуется.\n")
 
         stringBuilder.append(
-            "Автоматически высчитаная стоимость с учётом доставки:\n${getProductsSum(
+            "Автоматически высчитаная стоимость с учётом доставки:${getProductsSum(
                 elements
-            )} рублей."
+            )} рублей.\n"
         )
         if (!comment.isNullOrEmpty()) stringBuilder.append("Дополнительный комментарий клиента: $comment.")
         return stringBuilder.toString()

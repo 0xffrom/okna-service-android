@@ -264,7 +264,7 @@ class CalculatorFragment : Fragment() {
             isWinSlope, isWinGrid, isWinInstall, isWinDelivery
         )
 
-        root.add_cart_button.text = "Общая стоимость: ${summaryPrice.sum + summaryPrice.sumD} р."
+        root.add_cart_button.text = "Добавить в корзину (${summaryPrice.sum + summaryPrice.sumD} р.)"
         root.text_view_sumW.text = "Стоимость окна: ${summaryPrice.sumW} р."
         root.text_view_sumO.text = "Стоимость опций: ${summaryPrice.sumO} р."
         root.text_view_sumD.text = "Стоимость доставки: ${summaryPrice.sumD} р."
