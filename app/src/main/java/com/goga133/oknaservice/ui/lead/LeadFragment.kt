@@ -1,11 +1,10 @@
 package com.goga133.oknaservice.ui.lead
 
-import android.annotation.SuppressLint
+import android.app.AlertDialog
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.Window
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -19,6 +18,8 @@ import com.goga133.oknaservice.models.Calculator
 import com.goga133.oknaservice.models.Product
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.fragment_lead.view.*
+import kotlinx.android.synthetic.main.send_mail_dialog.*
+import kotlinx.android.synthetic.main.value_setter_dialog.*
 
 class LeadFragment : Fragment() {
 
@@ -43,17 +44,16 @@ class LeadFragment : Fragment() {
                 adapter.submitList(t)
                 // Проверка на количество элементов:
                 // Если элементов 0 => Корзина пуста.
-                if (t != null && t.isEmpty()){
+                if (t != null && t.isEmpty()) {
                     root.cart_null_textView.visibility = View.VISIBLE
                     root.main_info_layout.visibility = View.INVISIBLE
-                } else{
+                } else {
                     root.cart_null_textView.visibility = View.INVISIBLE
                     root.main_info_layout.visibility = View.VISIBLE
-                    root.isDelivery_textView.text = when(getProductsDelivery(t)){
+                    root.isDelivery_textView.text = when (getProductsDelivery(t)) {
                         true -> "Доставка: Требуется."
                         false -> "Доставка: Не требуется."
                     }
-                    // TODO: Android 5.1 -> при ItemTouch не изменяется цена, Android 10.0 -> наоборот 0_о
 
                     root.sum_textView.text = "Итоговая сумма к оплате: ${getProductsSum(t)} рублей."
                 }
@@ -77,25 +77,52 @@ class LeadFragment : Fragment() {
                 }
 
                 override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
-                    Snackbar.make(root, "Выбранное окно успешно убрано из корзины!", Snackbar.LENGTH_LONG).show()
+                    Snackbar.make(
+                        root,
+                        "Выбранное окно успешно убрано из корзины!",
+                        Snackbar.LENGTH_LONG
+                    ).show()
                     leadViewModel.deleteProduct(adapter.getProductAt(viewHolder.adapterPosition))
                 }
             }).attachToRecyclerView(root.list_products)
 
+
+        root.make_lead_button.setOnClickListener {
+            val mDialogView =
+                LayoutInflater.from(root.context).inflate(R.layout.send_mail_dialog, null)
+            val mBuilder = AlertDialog.Builder(root.context)
+                .setView(mDialogView)
+                .setTitle("Отправка заявки")
+            val mAlertDialog = mBuilder.show()
+
+
+            mAlertDialog.send_mail_by_auto_button.setOnClickListener {
+                // Метод для отправки на почту.
+
+                if (mAlertDialog.is_delete_cart_checkBox.isChecked) {
+                    // Очищение корзины
+                }
+            }
+
+            mAlertDialog.send_mail_by_user_button.setOnClickListener {
+                // Открытие нового окошка
+            }
+        }
+
         return root
     }
 
-    private fun getProductsDelivery(products : List<Product>) : Boolean{
-        for(i in products.indices){
-            if(products[i].isWinDelivery)
+    private fun getProductsDelivery(products: List<Product>): Boolean {
+        for (i in products.indices) {
+            if (products[i].isWinDelivery)
                 return true
         }
         return false
     }
 
-    private fun getProductsSum(products : List<Product>) : Int{
+    private fun getProductsSum(products: List<Product>): Int {
         var sum = 0
-        for(i in products.indices)
+        for (i in products.indices)
             sum += products[i].priceSum
 
         // Если есть доставка, то плюсуем только одну цену за доставку:

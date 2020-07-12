@@ -35,12 +35,13 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="10dp"
+                android:text="@{price.}"
                 app:autoSizeTextType="uniform" />
 
             <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/name_textView"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
-                android:id="@+id/name_textView"
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:hint="Имя"
@@ -55,9 +56,9 @@
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/mail_textView"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
-                android:id="@+id/mail_textView"
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:hint="Почта"
@@ -80,8 +81,8 @@
                 android:textSize="18sp">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    style="@style/Widget.AppCompat.EditText"
                     android:id="@+id/phone_textView"
+                    style="@style/Widget.AppCompat.EditText"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="phone" />
@@ -96,8 +97,8 @@
                 android:textSize="18sp">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    style="@style/Widget.AppCompat.EditText"
                     android:id="@+id/comment_textView"
+                    style="@style/Widget.AppCompat.EditText"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="textLongMessage" />
@@ -113,12 +114,13 @@
                 android:text="Отправить заявку" />
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
+
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/cart_null_textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:gravity="center"
-        android:textSize="18sp"
-        android:text="Корзина пуста"/>
+        android:text="Корзина пуста"
+        android:textSize="18sp" />
 </LinearLayout>
