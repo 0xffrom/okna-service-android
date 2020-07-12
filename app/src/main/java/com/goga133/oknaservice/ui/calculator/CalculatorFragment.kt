@@ -10,10 +10,10 @@ import android.widget.SeekBar
 import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.goga133.oknaservice.R
 import com.goga133.oknaservice.adapters.SliderAdapter
-import com.goga133.oknaservice.listeners.OnPageChangeListener
 import com.goga133.oknaservice.listeners.OnSeekBarChangeListener
 import com.goga133.oknaservice.models.Calculator
 import com.goga133.oknaservice.models.Product
@@ -21,6 +21,7 @@ import com.google.android.material.button.MaterialButtonToggleGroup
 import com.google.android.material.snackbar.Snackbar
 import com.smarteist.autoimageslider.IndicatorView.animation.type.IndicatorAnimationType
 import com.smarteist.autoimageslider.SliderAnimations
+import com.smarteist.autoimageslider.SliderPager
 import com.smarteist.autoimageslider.SliderView
 import kotlinx.android.synthetic.main.fragment_calculator.view.*
 import kotlinx.android.synthetic.main.value_setter_dialog.*
@@ -50,8 +51,6 @@ class CalculatorFragment : Fragment() {
         widthTextView = root.text_view_bar_width
         heightTextView = root.text_view_bar_height
 
-        val elements = calculatorViewModel.arraySliders.value ?: arrayOf()
-
         val listener = OnSeekBarChangeListener(fun(seekBar: SeekBar?, progress: Int): Unit {
             when (seekBar) {
                 widthSeekBar -> {
@@ -70,7 +69,13 @@ class CalculatorFragment : Fragment() {
         heightSeekBar.setOnSeekBarChangeListener(listener)
         widthSeekBar.setOnSeekBarChangeListener(listener)
 
-        setSliderBar(root, elements, calculatorViewModel)
+        val sliderAdapter = getSliderAdapter(root)
+
+        // При изменении коллекции изменяется содержимое адаптера.
+        calculatorViewModel.arraySliders.observe(viewLifecycleOwner, Observer { array ->
+            sliderAdapter.renewItems(array)
+        })
+
         setDialogAlert(root)
 
         root.toggle_button_group_p.addOnButtonCheckedListener { _: MaterialButtonToggleGroup, i: Int, b: Boolean ->
@@ -126,7 +131,7 @@ class CalculatorFragment : Fragment() {
             calculatorViewModel.insertProduct(
                 Product(
                     windowId,
-                    elements.first { x -> x.windowId == windowId }.image,
+                    sliderAdapter.getImageByWindowId(windowId),
                     h,
                     w,
                     typeProfile,
@@ -194,35 +199,45 @@ class CalculatorFragment : Fragment() {
         }
     }
 
-    private fun setSliderBar(
-        root: View,
-        elements: Array<SliderAdapter.SliderItem>,
-        calculatorViewModel: CalculatorViewModel
-    ) = {
-        ->
+    private fun getSliderAdapter(root: View): SliderAdapter {
         val sliderView: SliderView = root.imageSlider
-        val sliderAdapter = SliderAdapter(root.context, elements)
-        sliderView.setSliderAdapter(sliderAdapter)
-        sliderView.setIndicatorAnimation(IndicatorAnimationType.WORM)
-        sliderView.setSliderTransformAnimation(SliderAnimations.SIMPLETRANSFORMATION)
-        sliderView.isAutoCycle = false
-        sliderView.indicatorRadius = 1
-        sliderView.indicatorSelectedColor = Color.WHITE
-        sliderView.indicatorUnselectedColor = Color.GRAY
+        val sliderAdapter = SliderAdapter(root.context)
+        sliderView.apply {
+            setSliderAdapter(sliderAdapter)
+            setIndicatorAnimation(IndicatorAnimationType.WORM)
+            setSliderTransformAnimation(SliderAnimations.SIMPLETRANSFORMATION)
+            isAutoCycle = false
+            indicatorRadius = 1
+            indicatorSelectedColor = Color.WHITE
+            indicatorUnselectedColor = Color.GRAY
+        }
         sliderView.sliderPager.addOnPageChangeListener(
-            OnPageChangeListener(
-                fun(position: Int): Unit {
-                    currentWindow = Calculator().chooseWindow(elements[position].windowId)
-                    windowId = elements[position].windowId
-                    heightSeekBar.max = currentWindow.maxH - currentWindow.minH
-                    widthSeekBar.max = currentWindow.maxW - currentWindow.minW
+                object : SliderPager.OnPageChangeListener {
+                    override fun onPageScrollStateChanged(state: Int) {
+                        //
+                    }
 
-                    heightSeekBar.progress = 0
-                    widthSeekBar.progress = 0
-                }
-            )
-        )
-        sliderView.currentPagePosition = 0
+                    override fun onPageScrolled(
+                        position: Int,
+                        positionOffset: Float,
+                        positionOffsetPixels: Int
+                    ) {
+                        //
+                    }
+
+                    override fun onPageSelected(position: Int) {
+                        currentWindow =
+                            Calculator().chooseWindow(sliderAdapter.getItemAt(position).windowId)
+                        windowId = sliderAdapter.getItemAt(position).windowId
+                        heightSeekBar.max = currentWindow.maxH - currentWindow.minH
+                        widthSeekBar.max = currentWindow.maxW - currentWindow.minW
+
+                        heightSeekBar.progress = 0
+                        widthSeekBar.progress = 0
+                    }
+                })
+
+        return sliderAdapter
     }
 
 

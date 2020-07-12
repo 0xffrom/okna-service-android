@@ -11,14 +11,27 @@ import com.bumptech.glide.Glide
 import com.goga133.oknaservice.R
 import com.smarteist.autoimageslider.SliderViewAdapter
 
-class SliderAdapter(private val context: Context, elements: Array<SliderItem>) :
+
+class SliderAdapter(private val context: Context) :
     SliderViewAdapter<SliderAdapter.SliderAdapterVH>() {
-    private var mSliderItems: Array<SliderItem> = elements
+    private var mSliderItems: ArrayList<SliderItem> = arrayListOf()
 
     override fun onCreateViewHolder(parent: ViewGroup): SliderAdapterVH {
         val inflate =
             LayoutInflater.from(parent.context).inflate(R.layout.image_slider, parent, false)
         return SliderAdapterVH(inflate)
+    }
+
+    fun renewItems(sliderItems: ArrayList<SliderItem>) {
+        mSliderItems = sliderItems
+        notifyDataSetChanged()
+    }
+
+    fun getImageByWindowId(windowId : String) : Int{
+        return mSliderItems.first { x -> x.windowId == windowId }.image
+    }
+    fun getItemAt(position: Int): SliderItem {
+        return mSliderItems[position];
     }
 
     override fun onBindViewHolder(viewHolder: SliderAdapterVH, position: Int) {

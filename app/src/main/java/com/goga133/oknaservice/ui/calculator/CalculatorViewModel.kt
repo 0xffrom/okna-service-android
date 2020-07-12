@@ -20,8 +20,8 @@ class CalculatorViewModel(application: Application) : AndroidViewModel(applicati
         dao.insert(product)
     }
 
-    private val _arraySliders = MutableLiveData<Array<SliderAdapter.SliderItem>>().apply {
-        value = arrayOf(
+    private val _arraySliders = MutableLiveData<ArrayList<SliderAdapter.SliderItem>>().apply {
+        value = arrayListOf(
             SliderAdapter.SliderItem(
                 R.drawable.window1_1,
                 "1-1", "Одностворчатое окно"
@@ -133,6 +133,6 @@ class CalculatorViewModel(application: Application) : AndroidViewModel(applicati
         )
     }
 
-    val arraySliders: LiveData<Array<SliderAdapter.SliderItem>> = _arraySliders
+    val arraySliders: LiveData<ArrayList<SliderAdapter.SliderItem>> = _arraySliders
 
 }
