@@ -24,17 +24,18 @@ class ContactsFragment : Fragment() {
     ): View? {
         contactsViewModel = ViewModelProviders.of(this).get(ContactsViewModel::class.java)
         val root = inflater.inflate(R.layout.fragment_contacts, container, false)
+
         val viewManager = LinearLayoutManager(root.context)
+        val officesAdapter = OfficesAdapter(root.context)
 
         root.list_offices.apply {
-
-            setHasFixedSize(true)
-
+            setHasFixedSize(false)
             layoutManager = viewManager
-
-            contactsViewModel.arrayOffices.observe(viewLifecycleOwner,
-                Observer { adapter = OfficesAdapter(it, context) })
+            adapter = officesAdapter
         }
+
+        contactsViewModel.arrayOffices.observe(viewLifecycleOwner,
+            Observer { officesAdapter.renewItems(it)})
 
         return root
     }

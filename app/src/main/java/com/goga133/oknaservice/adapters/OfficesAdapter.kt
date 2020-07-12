@@ -14,7 +14,7 @@ import com.goga133.oknaservice.models.Office
 import kotlinx.android.synthetic.main.adapter_office.view.*
 
 
-class OfficesAdapter(private val array_offices: Array<Office>, private val context: Context) :
+class OfficesAdapter(private val context: Context) :
     RecyclerView.Adapter<OfficesAdapter.OfficeHolder>() {
 
     class OfficeHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -29,6 +29,12 @@ class OfficesAdapter(private val array_offices: Array<Office>, private val conte
         val telephoneLayout: LinearLayout = itemView.layout_telephone
     }
 
+    private var arrayOffices: Array<Office> = arrayOf<Office> ()
+    fun renewItems(newItems: Array<Office>) {
+        arrayOffices = newItems
+        notifyDataSetChanged()
+    }
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): OfficeHolder {
         val itemView =
             LayoutInflater.from(parent.context).inflate(R.layout.adapter_office, parent, false)
@@ -36,30 +42,30 @@ class OfficesAdapter(private val array_offices: Array<Office>, private val conte
     }
 
     override fun onBindViewHolder(holder: OfficeHolder, position: Int) {
-        holder.addressTextView.text = array_offices[position].Address
-        holder.cityTextView.text = array_offices[position].City
-        holder.appointmentTextView.text = array_offices[position].Appointment
-        holder.mobileTextView.text = array_offices[position].Mobile
-        holder.mailTextView.text = array_offices[position].Mail
-        holder.workTimeTextView.text = array_offices[position].WorkTime
+        holder.addressTextView.text = arrayOffices[position].Address
+        holder.cityTextView.text = arrayOffices[position].City
+        holder.appointmentTextView.text = arrayOffices[position].Appointment
+        holder.mobileTextView.text = arrayOffices[position].Mobile
+        holder.mailTextView.text = arrayOffices[position].Mail
+        holder.workTimeTextView.text = arrayOffices[position].WorkTime
 
         holder.addressLayout.setOnClickListener(View.OnClickListener {
             val gmmIntentUri =
-                Uri.parse("geo:${array_offices[position].Coordinates}?q=${array_offices[position].City},${(array_offices[position].Address)}")
+                Uri.parse("geo:${arrayOffices[position].Coordinates}?q=${arrayOffices[position].City},${(arrayOffices[position].Address)}")
             Intent(Intent.ACTION_VIEW, gmmIntentUri).let { context.startActivity(it) }
         })
         holder.mailLayout.setOnClickListener(View.OnClickListener {
-            val mailIntentUri = Uri.parse("mailto:${array_offices[position].Mail}")
+            val mailIntentUri = Uri.parse("mailto:${arrayOffices[position].Mail}")
             Intent(Intent.ACTION_VIEW, mailIntentUri).let { context.startActivity(it) }
         })
         holder.telephoneLayout.setOnClickListener(View.OnClickListener {
             // Split делается для того, чтобы выбрать только первый номер:
             val telephoneIntentUri =
-                Uri.parse("tel:${array_offices[position].Mobile.split(',')[0]}")
+                Uri.parse("tel:${arrayOffices[position].Mobile.split(',')[0]}")
             Intent(Intent.ACTION_VIEW, telephoneIntentUri).let { context.startActivity(it) }
         })
     }
 
 
-    override fun getItemCount() = array_offices.size
+    override fun getItemCount() = arrayOffices.size
 }
