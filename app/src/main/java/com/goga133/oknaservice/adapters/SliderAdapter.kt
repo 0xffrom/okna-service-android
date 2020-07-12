@@ -30,6 +30,7 @@ class SliderAdapter(private val context: Context) :
     fun getImageByWindowId(windowId : String) : Int{
         return mSliderItems.first { x -> x.windowId == windowId }.image
     }
+
     fun getItemAt(position: Int): SliderItem {
         return mSliderItems[position];
     }
