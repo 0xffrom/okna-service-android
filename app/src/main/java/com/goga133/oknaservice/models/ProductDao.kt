@@ -14,6 +14,9 @@ interface ProductDao {
     @Insert
     fun insert(product: Product)
 
+    @Query("DELETE FROM product")
+    fun deleteAll()
+
     @Delete
     fun delete(product: Product)
 }

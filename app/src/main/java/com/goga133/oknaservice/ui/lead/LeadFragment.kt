@@ -2,7 +2,9 @@ package com.goga133.oknaservice.ui.lead
 
 import android.app.AlertDialog
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
+import android.text.Editable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -19,8 +21,6 @@ import com.goga133.oknaservice.models.Product
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.fragment_lead.view.*
 import kotlinx.android.synthetic.main.send_mail_dialog.*
-import kotlinx.android.synthetic.main.value_setter_dialog.*
-import java.lang.StringBuilder
 
 
 class LeadFragment : Fragment() {
@@ -53,8 +53,14 @@ class LeadFragment : Fragment() {
                     root.cart_null_textView.visibility = View.INVISIBLE
                     root.main_info_layout.visibility = View.VISIBLE
                     root.isDelivery_textView.text = when (getProductsDelivery(t)) {
-                        true -> "Доставка: Требуется."
-                        false -> "Доставка: Не требуется."
+                        true -> {
+                            root.address_textInputLayout.isEnabled = true
+                            "Доставка: Требуется."
+                        }
+                        false -> {
+                            root.address_textInputLayout.isEnabled = false
+                            "Доставка: Не требуется."
+                        }
                     }
 
                     root.sum_textView.text = "Итоговая сумма к оплате: ${getProductsSum(t)} рублей."
@@ -90,39 +96,84 @@ class LeadFragment : Fragment() {
 
 
         root.make_lead_button.setOnClickListener {
-            val mDialogView =
-                LayoutInflater.from(root.context).inflate(R.layout.send_mail_dialog, null)
-            val mBuilder = AlertDialog.Builder(root.context)
-                .setView(mDialogView)
-                .setTitle("Отправка заявки")
-            val mAlertDialog = mBuilder.show()
+
+            if (root.name_textView.text.isNullOrEmpty())
+                Snackbar.make(root, "Вы забыли ввести имя!", Snackbar.LENGTH_LONG).show()
+            else if (root.phone_textView.text.isNullOrEmpty() && root.mail_textView.text.isNullOrEmpty())
+                Snackbar.make(
+                    root,
+                    "А как нам с Вами связаться? Введите телефон или адрес электронной почты.",
+                    Snackbar.LENGTH_LONG
+                ).show()
+            else if (getProductsDelivery(adapter.getElements()) && root.address_textView.text.isNullOrEmpty())
+                Snackbar.make(
+                    root,
+                    "Вы забыли указать адрес доставки, это поможет нам скорректировать цену.",
+                    Snackbar.LENGTH_LONG
+                ).show()
+
+            else {
+                val mDialogView =
+                    LayoutInflater.from(root.context).inflate(R.layout.send_mail_dialog, null)
+                val mBuilder = AlertDialog.Builder(root.context)
+                    .setView(mDialogView)
+                    .setTitle("Отправка заявки")
+                val mAlertDialog = mBuilder.show()
 
 
-            mAlertDialog.send_mail_by_auto_button.setOnClickListener {
-                // Метод для отправки на почту.
+                mAlertDialog.send_mail_by_auto_button.setOnClickListener {
 
-                if (mAlertDialog.is_delete_cart_checkBox.isChecked) {
-                    // Очищение корзины
+                    // TODO: Подрубить API для отправки.
+
+                    if (mAlertDialog.is_delete_cart_checkBox.isChecked) {
+                        // Очищение корзины
+                        leadViewModel.deleteAllProduct()
+                    }
                 }
-            }
 
-            mAlertDialog.send_mail_by_user_button.setOnClickListener {
-                // Открытие почтового сервиса:
-                val email = Intent(Intent.ACTION_SEND)
-                email.putExtra(Intent.EXTRA_EMAIL, arrayOf("os@okna-servise.com"))
-                email.putExtra(Intent.EXTRA_SUBJECT, "Бизнес заявка")
-                email.putExtra(Intent.EXTRA_TEXT, "")
-                email.type = "plain/text";
+                mAlertDialog.send_mail_by_user_button.setOnClickListener {
+                    // Открытие почтового сервиса для отправки письма юзером:
 
-                startActivity(Intent.createChooser(email, "Выберите почтовую программу:"))
+                    val email =
+                        Intent(
+                            Intent.ACTION_SENDTO,
+                            Uri.parse("mailto:os@okna-servise.com")
+                        ).apply {
+                            putExtra(Intent.EXTRA_SUBJECT, "Бизнес заявка")
+                            putExtra(
+                                Intent.EXTRA_TEXT,
+                                getMailText(
+                                    adapter,
+                                    root.name_textView.text,
+                                    root.mail_textView?.text,
+                                    root.phone_textView?.text,
+                                    root.address_textView?.text,
+                                    root.comment_textView?.text
+                                )
+                            )
 
+                        }
+                    startActivity(Intent.createChooser(email, "Выберите почтовую программу:"))
+
+                    if (mAlertDialog.is_delete_cart_checkBox.isChecked) {
+                        // Очищение корзины
+                        leadViewModel.deleteAllProduct()
+                    }
+                }
             }
         }
 
         return root
     }
 
-    private fun getMailText(adapter: ProductsAdapter, name : String?, email : String?, phoneNumber : String?, address : String?, comment : String?) : String {
+    private fun getMailText(
+        adapter: ProductsAdapter,
+        name: Editable?,
+        email: Editable?,
+        phoneNumber: Editable?,
+        address: Editable?,
+        comment: Editable?
+    ): String {
         val stringBuilder = StringBuilder()
 
         if (!name.isNullOrEmpty()) stringBuilder.append("Имя: $name.\n")
@@ -131,10 +182,10 @@ class LeadFragment : Fragment() {
 
         stringBuilder.append("Заказ:\n")
         val elements = adapter.getElements()
-        for (i in elements.indices){
-            stringBuilder.append("\n ===== №${i+1} =====")
+        for (i in elements.indices) {
+            stringBuilder.append("\n ===== №${i + 1} ===== \n")
             stringBuilder.append(elements[i])
-            stringBuilder.append(" ===== №${i+1} =====\n")
+            stringBuilder.append("\n ===== №${i + 1} ===== \n")
         }
 
         if (!address.isNullOrEmpty())
@@ -142,7 +193,11 @@ class LeadFragment : Fragment() {
         else
             stringBuilder.append("Доставка не требуется.\n")
 
-        stringBuilder.append("Автоматически высчитаная стоимость с учётом доставки:\n${getProductsSum(elements)}")
+        stringBuilder.append(
+            "Автоматически высчитаная стоимость с учётом доставки:\n${getProductsSum(
+                elements
+            )} рублей."
+        )
         if (!comment.isNullOrEmpty()) stringBuilder.append("Дополнительный комментарий клиента: $comment.")
         return stringBuilder.toString()
     }
