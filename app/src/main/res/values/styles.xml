@@ -5,8 +5,9 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
-        <item name="colorSecondary">@color/colorSecondary</item>
-        <item name="android:textColorSecondary">@color/colorSecondary</item>
+        <item name="android:textColor">@color/colorSecondaryText</item>
+        <item name="android:textColorSecondary">@color/colorPrimaryText</item>
+        <item name="colorBackgroundFloating">@color/colorAccent</item>
     </style>
 
     <style name="AppTheme.NoActionBar">

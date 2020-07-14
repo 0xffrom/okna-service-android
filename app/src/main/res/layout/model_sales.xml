@@ -9,7 +9,6 @@
     android:layout_margin="10dp"
     android:layout_height="wrap_content">
     <LinearLayout
-        android:background="@drawable/side_nav_bar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
@@ -21,15 +20,15 @@
             <ImageView
                 android:id="@+id/title_image"
                 style="@style/model_sales_imageView"
-                android:layout_width="125dp"
-                android:layout_height="125dp"/>
+                android:layout_width="100dp"
+                android:layout_height="100dp"/>
 
             <TextView
                 android:id="@+id/title_textView"
-                android:textColor="@color/colorText"
+                android:textColor="@color/colorPrimaryText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="center_horizontal"
+                android:gravity="center"
                 android:textSize="20sp"
                 android:padding="10dp"
                 android:textStyle="bold"/>
@@ -37,21 +36,11 @@
 
         <TextView
             android:id="@+id/description_textView"
-            android:textColor="@color/colorText"
+            android:textColor="@color/colorSecondaryText"
             android:textStyle="italic"
             android:padding="10dp"
             android:textSize="15sp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
-        <TextView
-            android:id="@+id/date_textView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="right"
-            android:gravity="right"
-            android:textColor="@color/colorText"
-            android:paddingEnd="15dp"
-            android:textStyle="italic"
-            android:textSize="10sp"/>
     </LinearLayout>
 </com.google.android.material.card.MaterialCardView>

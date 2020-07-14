@@ -35,13 +35,13 @@ class MainActivity : AppCompatActivity() {
 
         appBarConfiguration = AppBarConfiguration(
             setOf(
-                R.id.nav_home, R.id.nav_calculator, R.id.nav_lead, R.id.nav_info, R.id.nav_contacts
+                R.id.nav_home, R.id.nav_calculator, R.id.nav_lead,  R.id.nav_contacts, R.id.nav_info, R.id.nav_settings
             ), drawerLayout
         )
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
 
-        val fab: ExtendedFloatingActionButton = findViewById(R.id.fab)
+        val fab: FloatingActionButton = findViewById(R.id.fab)
         fab.setOnClickListener {
             if (navController.currentDestination?.id != R.id.nav_calculator)
                 navController.navigate(R.id.nav_calculator)

@@ -10,20 +10,20 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.goga133.oknaservice.R
 
-class InfoFragment : Fragment() {
+class SettingsFragment : Fragment() {
 
-    private lateinit var infoViewModel: InfoViewModel
+    private lateinit var settingsViewModel: SettingsViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        infoViewModel = ViewModelProviders.of(this).get(InfoViewModel::class.java)
-        val root = inflater.inflate(R.layout.fragment_info, container, false)
+        settingsViewModel = ViewModelProviders.of(this).get(SettingsViewModel::class.java)
+        val root = inflater.inflate(R.layout.fragment_settings, container, false)
 
-        val textView: TextView = root.findViewById(R.id.text_info)
-        infoViewModel.text.observe(viewLifecycleOwner, Observer {
+        val textView: TextView = root.findViewById(R.id.text_settings)
+        settingsViewModel.text.observe(viewLifecycleOwner, Observer {
             textView.text = it
         })
         return root
