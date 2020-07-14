@@ -565,7 +565,7 @@ class Calculator {
 
         // window - Параметры окна
         val sum: Int // Общая стоимость
-        val sumW: Int // Стоимость изделия
+        var sumW: Int // Стоимость изделия
         val sumR: Int // Стоимость рамы
         var sumG: Int = 0 // Стоимость стеклопакета
         var sumS: Int = 0 // Стоимость створок
@@ -698,6 +698,8 @@ class Calculator {
                 sumM = (((hwr * wwr) + (hr * wdr)) * price.montage).roundToInt();
         }
 
+        // Добавление 7 процентов к итоговой стоимости:
+        sumW = (sumW * 1.07).roundToInt()
         sumD = if (isWinDelivery) price.delivery else 0;
         sum = sumW + sumO + sumM;
 

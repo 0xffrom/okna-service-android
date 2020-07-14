@@ -29,10 +29,11 @@
         android:layout_gravity="bottom|end"
         android:layout_margin="@dimen/fab_margin"
         app:fabSize="auto"
-        android:text="Калькулятор"
         android:textColor="#FFFFFF"
         app:iconTint="#FFFFFF"
         style="@style/Widget.MaterialComponents.ExtendedFloatingActionButton.Icon"
-        app:icon="@drawable/ic_menu_calculator" />
+        app:icon="@drawable/ic_menu_calculator"
+
+        />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

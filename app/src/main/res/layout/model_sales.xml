@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    app:cardCornerRadius="16dp"
+    android:padding="5dp"
+    android:layout_margin="10dp"
+    android:layout_height="wrap_content">
+    <LinearLayout
+        android:background="@drawable/side_nav_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:orientation="horizontal"
+            android:padding="5dp"
+            android:layout_height="wrap_content">
+            <ImageView
+                android:id="@+id/title_image"
+                style="@style/model_sales_imageView"
+                android:layout_width="125dp"
+                android:layout_height="125dp"/>
+
+            <TextView
+                android:id="@+id/title_textView"
+                android:textColor="@color/colorText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:textSize="20sp"
+                android:padding="10dp"
+                android:textStyle="bold"/>
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/description_textView"
+            android:textColor="@color/colorText"
+            android:textStyle="italic"
+            android:padding="10dp"
+            android:textSize="15sp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+        <TextView
+            android:id="@+id/date_textView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:gravity="right"
+            android:textColor="@color/colorText"
+            android:paddingEnd="15dp"
+            android:textStyle="italic"
+            android:textSize="10sp"/>
+    </LinearLayout>
+</com.google.android.material.card.MaterialCardView>

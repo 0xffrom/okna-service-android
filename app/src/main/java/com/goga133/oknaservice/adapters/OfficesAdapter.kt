@@ -11,7 +11,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.goga133.oknaservice.R
 import com.goga133.oknaservice.models.Office
-import kotlinx.android.synthetic.main.adapter_office.view.*
+import kotlinx.android.synthetic.main.model_office.view.*
 
 
 class OfficesAdapter(private val context: Context) :
@@ -37,7 +37,7 @@ class OfficesAdapter(private val context: Context) :
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): OfficeHolder {
         val itemView =
-            LayoutInflater.from(parent.context).inflate(R.layout.adapter_office, parent, false)
+            LayoutInflater.from(parent.context).inflate(R.layout.model_office, parent, false)
         return OfficeHolder(itemView)
     }
 
