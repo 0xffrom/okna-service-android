@@ -24,15 +24,15 @@
 
     <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
         android:id="@+id/fab"
+        style="@style/Widget.MaterialComponents.ExtendedFloatingActionButton.Icon"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
-        android:layout_margin="@dimen/fab_margin"
-        app:fabSize="auto"
         android:text="Калькулятор"
-        android:textColor="#FFFFFF"
-        app:iconTint="#FFFFFF"
-        style="@style/Widget.MaterialComponents.ExtendedFloatingActionButton.Icon"
+        android:layout_margin="@dimen/fab_margin"
+        app:iconTint="#2C565C"
+        android:textColor="#2C565C"
+        app:fabSize="auto"
         app:icon="@drawable/ic_menu_calculator" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

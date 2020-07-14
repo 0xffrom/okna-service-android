@@ -6,8 +6,10 @@ import android.net.Uri
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.goga133.oknaservice.R
@@ -21,7 +23,7 @@ import kotlinx.android.synthetic.main.model_sales.view.*
 class SalesAdapter(private val context: Context) : RecyclerView.Adapter<SalesAdapter.SalesHolder>() {
 
     class SalesHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val titleImage: ShapeableImageView = itemView.title_image
+        val titleImage: ImageView = itemView.title_image
         val title: TextView = itemView.title_textView
         val description: TextView = itemView.description_textView
         val datePublish: TextView = itemView.date_textView
@@ -46,9 +48,12 @@ class SalesAdapter(private val context: Context) : RecyclerView.Adapter<SalesAda
         holder.description.text = salesArray[position].description
         holder.datePublish.text = salesArray[position].datePublish.toString()
         // Загрузка Image по URL.
-        Glide.with(context)
+        Glide
+            .with(context)
             .load(salesArray[position].imageUrl)
+            .circleCrop()
             .into(holder.titleImage)
+
     }
 
 
