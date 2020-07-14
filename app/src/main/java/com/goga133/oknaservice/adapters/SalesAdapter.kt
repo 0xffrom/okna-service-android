@@ -18,6 +18,8 @@ import com.goga133.oknaservice.models.SaleCard
 import com.google.android.material.imageview.ShapeableImageView
 import kotlinx.android.synthetic.main.model_office.view.*
 import kotlinx.android.synthetic.main.model_sales.view.*
+import java.text.SimpleDateFormat
+import java.util.*
 
 
 class SalesAdapter(private val context: Context) : RecyclerView.Adapter<SalesAdapter.SalesHolder>() {
@@ -46,7 +48,7 @@ class SalesAdapter(private val context: Context) : RecyclerView.Adapter<SalesAda
     override fun onBindViewHolder(holder: SalesHolder, position: Int) {
         holder.title.text = salesArray[position].title
         holder.description.text = salesArray[position].description
-        holder.datePublish.text = salesArray[position].datePublish.toString()
+        holder.datePublish.text =  SimpleDateFormat("dd-MM-yyyy", Locale.getDefault()).format(salesArray[position].datePublish).toString()
         // Загрузка Image по URL.
         Glide
             .with(context)
