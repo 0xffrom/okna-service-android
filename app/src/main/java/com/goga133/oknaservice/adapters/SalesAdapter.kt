@@ -9,35 +9,48 @@ import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.goga133.oknaservice.R
 import com.goga133.oknaservice.models.Office
 import com.goga133.oknaservice.models.SaleCard
+import com.google.android.material.imageview.ShapeableImageView
 import kotlinx.android.synthetic.main.model_office.view.*
+import kotlinx.android.synthetic.main.model_sales.view.*
 
 
 class SalesAdapter(private val context: Context) : RecyclerView.Adapter<SalesAdapter.SalesHolder>() {
 
     class SalesHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-
+        val titleImage: ShapeableImageView = itemView.title_image
+        val title: TextView = itemView.title_textView
+        val description: TextView = itemView.description_textView
+        val datePublish: TextView = itemView.date_textView
 
     }
 
-    private var salesOffices: Array<SaleCard> = arrayOf<SaleCard> ()
+    private var salesArray: Array<SaleCard> = arrayOf<SaleCard> ()
+
     fun renewItems(newItems: Array<SaleCard>) {
-        salesOffices = newItems
+        salesArray = newItems
         notifyDataSetChanged()
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SalesHolder {
         val itemView =
-            LayoutInflater.from(parent.context).inflate(R.layout.model_office, parent, false)
+            LayoutInflater.from(parent.context).inflate(R.layout.model_sales, parent, false)
         return SalesHolder(itemView)
     }
 
     override fun onBindViewHolder(holder: SalesHolder, position: Int) {
-
+        holder.title.text = salesArray[position].title
+        holder.description.text = salesArray[position].description
+        holder.datePublish.text = salesArray[position].datePublish.toString()
+        // Загрузка Image по URL.
+        Glide.with(context)
+            .load(salesArray[position].imageUrl)
+            .into(holder.titleImage)
     }
 
 
-    override fun getItemCount() = salesOffices.size
+    override fun getItemCount() = salesArray.size
 }
