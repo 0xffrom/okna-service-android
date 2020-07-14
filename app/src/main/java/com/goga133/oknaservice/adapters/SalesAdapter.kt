@@ -28,7 +28,6 @@ class SalesAdapter(private val context: Context) : RecyclerView.Adapter<SalesAda
         val titleImage: ImageView = itemView.title_image
         val title: TextView = itemView.title_textView
         val description: TextView = itemView.description_textView
-        val datePublish: TextView = itemView.date_textView
 
     }
 
@@ -48,7 +47,6 @@ class SalesAdapter(private val context: Context) : RecyclerView.Adapter<SalesAda
     override fun onBindViewHolder(holder: SalesHolder, position: Int) {
         holder.title.text = salesArray[position].title
         holder.description.text = salesArray[position].description
-        holder.datePublish.text =  SimpleDateFormat("dd-MM-yyyy", Locale.getDefault()).format(salesArray[position].datePublish).toString()
         // Загрузка Image по URL.
         Glide
             .with(context)
