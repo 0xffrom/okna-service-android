@@ -5,6 +5,8 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.text.Editable
+import android.text.TextUtils
+import android.util.Patterns
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -98,20 +100,25 @@ class LeadFragment : Fragment() {
         root.make_lead_button.setOnClickListener {
 
             if (root.name_textView.text.isNullOrEmpty())
-                Snackbar.make(root, "Вы забыли ввести имя!", Snackbar.LENGTH_LONG).show()
+                Snackbar.make(root, "Пожалуйста, укажите своё имя.", Snackbar.LENGTH_LONG).show()
             else if (root.phone_textView.text.isNullOrEmpty() && root.mail_textView.text.isNullOrEmpty())
                 Snackbar.make(
                     root,
-                    "А как нам с Вами связаться? Введите телефон или адрес электронной почты.",
+                    "Пожалуйста, укажите свой телефон или адрес электронной почты.",
                     Snackbar.LENGTH_LONG
                 ).show()
             else if (getProductsDelivery(adapter.getElements()) && root.address_textView.text.isNullOrEmpty())
                 Snackbar.make(
                     root,
-                    "Вы забыли указать адрес доставки, это поможет нам скорректировать цену.",
+                    "Пожалуйста, укажите адрес доставки, это поможет нам скорректировать цену.",
                     Snackbar.LENGTH_LONG
                 ).show()
-
+            else if(!isValidEmail(root.mail_textView.text))
+                Snackbar.make(
+                    root,
+                    "Пожалуйста, укажите верный формат Вашей электронной почты.",
+                    Snackbar.LENGTH_LONG
+                ).show()
             else {
                 val mDialogView =
                     LayoutInflater.from(root.context).inflate(R.layout.send_mail_dialog, null)
@@ -209,6 +216,12 @@ class LeadFragment : Fragment() {
                 return true
         }
         return false
+    }
+
+    // Проверка на валидный Email
+    fun isValidEmail(target: CharSequence?): Boolean {
+        return !TextUtils.isEmpty(target) && Patterns.EMAIL_ADDRESS.matcher(target)
+            .matches()
     }
 
     private fun getProductsSum(products: List<Product>): Int {
