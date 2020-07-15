@@ -13,7 +13,6 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
-import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.navigation.NavigationView
 
@@ -35,7 +34,12 @@ class MainActivity : AppCompatActivity() {
 
         appBarConfiguration = AppBarConfiguration(
             setOf(
-                R.id.nav_home, R.id.nav_calculator, R.id.nav_lead,  R.id.nav_contacts, R.id.nav_info, R.id.nav_settings
+                R.id.nav_home,
+                R.id.nav_calculator,
+                R.id.nav_lead,
+                R.id.nav_contacts,
+                R.id.nav_info,
+                R.id.nav_settings
             ), drawerLayout
         )
         setupActionBarWithNavController(navController, appBarConfiguration)
@@ -67,14 +71,29 @@ class MainActivity : AppCompatActivity() {
         return true
     }
 
+    // Обработчик нажатия на иконку на тулбаре сверху:
     override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {
         R.id.action_call -> {
-            val intent = Intent(Intent.ACTION_DIAL)
-            intent.data = Uri.parse(getString(R.string.telephone))
-            startActivity(intent)
+            startActivity(Intent(Intent.ACTION_DIAL).apply {
+                // TODO: Телефон в ViewModel
+                data = Uri.parse(getString(R.string.telephone))
+            })
             true
         }
-
+        R.id.action_mail -> {
+            // TODO: Почта в ViewModel
+            startActivity(Intent(Intent.ACTION_VIEW).apply {
+                data = Uri.parse("mailto:os@okna-servise.com")
+            })
+            true
+        }
+        R.id.action_web -> {
+            // TODO: Почту в ViewModel
+            startActivity(Intent(Intent.ACTION_VIEW).apply {
+                data = Uri.parse("https://www.okna-servise.com/")
+            })
+            true
+        }
         else -> {
             // If we got here, the user's action was not recognized.
             // Invoke the superclass to handle it.
