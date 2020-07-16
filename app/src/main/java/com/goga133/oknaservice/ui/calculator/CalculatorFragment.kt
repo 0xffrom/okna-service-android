@@ -176,11 +176,11 @@ class CalculatorFragment : Fragment() {
 
             mAlertDialog.dialog_button_set.setOnClickListener {
                 if (mAlertDialog.dialog_input_value_width.text.toString()
-                        .isEmpty() || mAlertDialog.dialog_input_value_width.text.toString().toInt()
-                        .let { x -> x < currentWindow.minW || x > currentWindow.maxW } ||
+                        .isEmpty() || mAlertDialog.dialog_input_value_width.text.toString().toIntOrNull()
+                        .let { x -> x == null || x < currentWindow.minW || x > currentWindow.maxW }  ||
                     mAlertDialog.dialog_input_value_height.text.toString()
-                        .isEmpty() || mAlertDialog.dialog_input_value_height.text.toString().toInt()
-                        .let { x -> x < currentWindow.minH || x > currentWindow.maxH }
+                        .isEmpty() || mAlertDialog.dialog_input_value_height.text.toString().toIntOrNull()
+                        .let { x -> x == null || x < currentWindow.minH || x > currentWindow.maxH }
                 )
                     Toast.makeText(
                         root.context,

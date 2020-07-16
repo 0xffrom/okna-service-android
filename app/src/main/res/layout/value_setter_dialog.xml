@@ -17,6 +17,7 @@
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/dialog_input_value_width"
             style="@style/Widget.AppCompat.EditText"
+            android:maxLength="7"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="number" />
@@ -36,6 +37,7 @@
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/dialog_input_value_height"
             style="@style/Widget.AppCompat.EditText"
+            android:maxLength="7"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="number" />
