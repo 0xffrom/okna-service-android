@@ -5,9 +5,13 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.text.Editable
+import android.text.TextUtils
+import android.text.TextWatcher
+import android.util.Patterns
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.EditText
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
@@ -19,6 +23,7 @@ import com.goga133.oknaservice.adapters.ProductsAdapter
 import com.goga133.oknaservice.models.Calculator
 import com.goga133.oknaservice.models.Product
 import com.google.android.material.snackbar.Snackbar
+import com.google.android.material.textfield.TextInputLayout
 import kotlinx.android.synthetic.main.fragment_lead.view.*
 import kotlinx.android.synthetic.main.send_mail_dialog.*
 
@@ -94,24 +99,36 @@ class LeadFragment : Fragment() {
                 }
             }).attachToRecyclerView(root.list_products)
 
+        // Валидатор введённых данных //
+        root.mail_textInputLayout.validate(
+            "Некорректный E-Mail!",
+            root.mail_textView
+        ) { s -> isValidEmail(s) }
+        root.phone_textInputLayout.validate(
+            "Некорректный номер мобильного телефона!",
+            root.phone_textView
+        ) { s -> isValidPhoneNumber(s) }
+        // Валидатор введённых данных //
 
+        // Обработка нажатия "Оформить заказ":
         root.make_lead_button.setOnClickListener {
-
+            // Проверка на корректность введённого имени:
             if (root.name_textView.text.isNullOrEmpty())
-                Snackbar.make(root, "Вы забыли ввести имя!", Snackbar.LENGTH_LONG).show()
-            else if (root.phone_textView.text.isNullOrEmpty() && root.mail_textView.text.isNullOrEmpty())
+                Snackbar.make(root, "Пожалуйста, укажите своё имя.", Snackbar.LENGTH_LONG).show()
+            else if (root.mail_textView.text.isNullOrEmpty() || root.phone_textView.text.isNullOrEmpty()) {
                 Snackbar.make(
                     root,
-                    "А как нам с Вами связаться? Введите телефон или адрес электронной почты.",
+                    "Пожалуйста, укажите адрес электронной почты или свой мобильный телефон.",
                     Snackbar.LENGTH_LONG
                 ).show()
-            else if (getProductsDelivery(adapter.getElements()) && root.address_textView.text.isNullOrEmpty())
+            }
+            // Если где-то валидатор выскочил:
+            else if (root.mail_textInputLayout.error != null || root.phone_textInputLayout.error != null)
                 Snackbar.make(
                     root,
-                    "Вы забыли указать адрес доставки, это поможет нам скорректировать цену.",
+                    "Пожалуйста, укажите верный формат Вашего мобильного телефона или адрес электронной почты.",
                     Snackbar.LENGTH_LONG
                 ).show()
-
             else {
                 val mDialogView =
                     LayoutInflater.from(root.context).inflate(R.layout.send_mail_dialog, null)
@@ -125,7 +142,11 @@ class LeadFragment : Fragment() {
 
                     // TODO: Подрубить API для отправки.
 
-                    Snackbar.make(root, "К сожалению, отправка в автоматическом режиме сейчас не работает :(", Snackbar.LENGTH_SHORT).show()
+                    Snackbar.make(
+                        root,
+                        "К сожалению, отправка в автоматическом режиме сейчас не работает :(",
+                        Snackbar.LENGTH_SHORT
+                    ).show()
 /*                    if (mAlertDialog.is_delete_cart_checkBox.isChecked) {
                         // Очищение корзины
                         leadViewModel.deleteAllProduct()
@@ -209,6 +230,42 @@ class LeadFragment : Fragment() {
                 return true
         }
         return false
+    }
+
+    // Проверка на валидный Email:
+    private fun isValidEmail(target: CharSequence?): Boolean {
+        return target.isNullOrEmpty() || !TextUtils.isEmpty(target) && Patterns.EMAIL_ADDRESS.matcher(
+            target
+        )
+            .matches()
+    }
+
+    // Проверка на валидный номер мобильного телефона:
+    private fun isValidPhoneNumber(target: CharSequence?): Boolean {
+        return target.isNullOrEmpty() || !TextUtils.isEmpty(target) && Patterns.PHONE.matcher(target)
+            .matches()
+    }
+
+    private fun TextInputLayout.validate(
+        message: String,
+        editText: EditText,
+        validator: (String) -> Boolean
+    ) {
+        editText.afterTextChanged {
+            this.error = if (validator(it)) null else message
+        }
+    }
+
+    private fun EditText.afterTextChanged(afterTextChanged: (String) -> Unit) {
+        this.addTextChangedListener(object : TextWatcher {
+            override fun afterTextChanged(s: Editable?) {
+                afterTextChanged.invoke(s.toString())
+            }
+
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+        })
     }
 
     private fun getProductsSum(products: List<Product>): Int {
