@@ -115,7 +115,7 @@ class LeadFragment : Fragment() {
             // Проверка на корректность введённого имени:
             if (root.name_textView.text.isNullOrEmpty())
                 Snackbar.make(root, "Пожалуйста, укажите своё имя.", Snackbar.LENGTH_LONG).show()
-            else if (root.mail_textView.text.isNullOrEmpty() || root.phone_textView.text.isNullOrEmpty()) {
+            else if (!root.mail_textView.text.isNullOrEmpty() && !root.phone_textView.text.isNullOrEmpty()) {
                 Snackbar.make(
                     root,
                     "Пожалуйста, укажите адрес электронной почты или свой мобильный телефон.",
@@ -126,7 +126,7 @@ class LeadFragment : Fragment() {
             else if (root.mail_textInputLayout.error != null || root.phone_textInputLayout.error != null)
                 Snackbar.make(
                     root,
-                    "Пожалуйста, укажите верный формат Вашего мобильного телефона или адрес электронной почты.",
+                    "Пожалуйста, укажите верный номер мобильного телефона или почты.",
                     Snackbar.LENGTH_LONG
                 ).show()
             else {
@@ -155,27 +155,21 @@ class LeadFragment : Fragment() {
 
                 mAlertDialog.send_mail_by_user_button.setOnClickListener {
                     // Открытие почтового сервиса для отправки письма юзером:
-
-                    val email =
-                        Intent(
-                            Intent.ACTION_SENDTO,
-                            Uri.parse("mailto:os@okna-servise.com")
-                        ).apply {
-                            putExtra(Intent.EXTRA_SUBJECT, "Бизнес заявка")
-                            putExtra(
-                                Intent.EXTRA_TEXT,
-                                getMailText(
+                    val intent = Intent(Intent.ACTION_VIEW).apply {
+                        data =
+                            Uri.parse(
+                                "mailto:os@okna-servise.com?subject=Бизнес заявка&body=${getMailText(
                                     adapter,
                                     root.name_textView.text,
                                     root.mail_textView?.text,
                                     root.phone_textView?.text,
                                     root.address_textView?.text,
                                     root.comment_textView?.text
-                                )
-                            )
+                                )}"
+                            );
+                    }
 
-                        }
-                    startActivity(Intent.createChooser(email, "Выберите почтовую программу:"))
+                    startActivity(intent);
 
                     if (mAlertDialog.is_delete_cart_checkBox.isChecked) {
                         // Очищение корзины
@@ -197,28 +191,28 @@ class LeadFragment : Fragment() {
         comment: Editable?
     ): String {
         val stringBuilder = StringBuilder()
+        val sysLineSeparator = "<br/>"
+        if (!name.isNullOrEmpty()) stringBuilder.append("Имя: $name.$sysLineSeparator")
+        if (!email.isNullOrEmpty()) stringBuilder.append("Почта: $email.$sysLineSeparator")
+        if (!phoneNumber.isNullOrEmpty()) stringBuilder.append("Телефон: $phoneNumber.$sysLineSeparator")
 
-        if (!name.isNullOrEmpty()) stringBuilder.append("Имя: $name.\n")
-        if (!email.isNullOrEmpty()) stringBuilder.append("Почта: $email.\n")
-        if (!phoneNumber.isNullOrEmpty()) stringBuilder.append("Телефон: $phoneNumber.\n")
-
-        stringBuilder.append("Заказ:\n")
+        stringBuilder.append("Заказ:")
         val elements = adapter.getElements()
         for (i in elements.indices) {
-            stringBuilder.append("\n ===== №${i + 1} ===== \n")
-            stringBuilder.append(elements[i])
-            stringBuilder.append("\n ===== №${i + 1} ===== \n")
+            stringBuilder.append("$sysLineSeparator$sysLineSeparator<------ №${i + 1} ------>$sysLineSeparator")
+            stringBuilder.append(elements[i].toString().replace("\n", sysLineSeparator))
+            stringBuilder.append("r$sysLineSeparator<------ №${i + 1} ------>$sysLineSeparator$sysLineSeparator")
         }
 
         if (!address.isNullOrEmpty())
-            stringBuilder.append("Доставка по адресу: $address.\n")
+            stringBuilder.append("Доставка по адресу: $address.$sysLineSeparator")
         else
-            stringBuilder.append("Доставка не требуется.\n")
+            stringBuilder.append("Доставка не требуется.$sysLineSeparator")
 
         stringBuilder.append(
-            "Автоматически высчитаная стоимость с учётом доставки:${getProductsSum(
+            "Автоматически высчитаная стоимость с учётом доставки: ${getProductsSum(
                 elements
-            )} рублей.\n"
+            )} рублей.$sysLineSeparator"
         )
         if (!comment.isNullOrEmpty()) stringBuilder.append("Дополнительный комментарий клиента: $comment.")
         return stringBuilder.toString()
