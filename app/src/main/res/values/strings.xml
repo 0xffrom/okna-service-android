@@ -29,7 +29,7 @@
     <string name="p2_description">Rehau THERMO 60мм, 4 камеры, фурнитура Roto</string>
     <string name="p1_description">Reachmont ECO 60мм, 3 камеры, фурнитура VORNE</string>
     <string name="button_success">Применить</string>
-    <string name="send_mail_recommendation">При отправке заявки, Вы можете использовать свою почту для получения более быстрой обратной связи.</string>
+    <string name="send_mail_recommendation">При отправке заявки, Вы можете использовать свою почту для получения более быстрой обратной связи. Текст заказа будет скопирован в буфер обмена.</string>
     <string name="send_mail_rubbish">Очистить корзину</string>
     <string name="send_mail_user_mail">Отправлю со своей почты</string>
     <string name="send_mail_automatic">Отправить автоматически</string>

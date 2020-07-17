@@ -60,6 +60,7 @@ class ProductsAdapter(
         Glide.with(context)
             .load(getItem(position).windowIdResource)
             .into(holder.imageView)
+
         holder.description.text = getItem(position).toString()
         holder.deleteProductButton.setOnClickListener(OnClickRemoveItem(leadViewModel, getItem(position)))
     }

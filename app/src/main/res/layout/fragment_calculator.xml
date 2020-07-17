@@ -369,7 +369,7 @@
         android:id="@+id/add_cart_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginHorizontal="40dp"
+        android:layout_marginHorizontal="5dp"
         android:layout_gravity="center"
         android:gravity="center"
         app:icon="@drawable/ic_menu_cart"

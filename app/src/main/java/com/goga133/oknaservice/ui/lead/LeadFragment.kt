@@ -1,6 +1,9 @@
 package com.goga133.oknaservice.ui.lead
 
 import android.app.AlertDialog
+import android.content.ClipData
+import android.content.ClipboardManager
+import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -115,7 +118,7 @@ class LeadFragment : Fragment() {
             // Проверка на корректность введённого имени:
             if (root.name_textView.text.isNullOrEmpty())
                 Snackbar.make(root, "Пожалуйста, укажите своё имя.", Snackbar.LENGTH_LONG).show()
-            else if (!root.mail_textView.text.isNullOrEmpty() && !root.phone_textView.text.isNullOrEmpty()) {
+            else if (root.mail_textView.text.isNullOrEmpty() && root.phone_textView.text.isNullOrEmpty()) {
                 Snackbar.make(
                     root,
                     "Пожалуйста, укажите адрес электронной почты или свой мобильный телефон.",
@@ -155,21 +158,46 @@ class LeadFragment : Fragment() {
 
                 mAlertDialog.send_mail_by_user_button.setOnClickListener {
                     // Открытие почтового сервиса для отправки письма юзером:
-                    val intent = Intent(Intent.ACTION_VIEW).apply {
-                        data =
-                            Uri.parse(
-                                "mailto:os@okna-servise.com?subject=Бизнес заявка&body=${getMailText(
-                                    adapter,
-                                    root.name_textView.text,
-                                    root.mail_textView?.text,
-                                    root.phone_textView?.text,
-                                    root.address_textView?.text,
-                                    root.comment_textView?.text
-                                )}"
-                            );
+
+                    val emailIntent = Intent(
+                        Intent.ACTION_SEND).apply {
+                        data = Uri.parse("mailto:")
+                        type = "text/plain"
+                        putExtra(
+                            Intent.EXTRA_EMAIL,
+                            arrayOf("os@okna-servise.com")
+                        )
+                        putExtra(
+                            Intent.EXTRA_TEXT, getMailText(
+                                adapter,
+                                root.name_textView.text,
+                                root.mail_textView?.text,
+                                root.phone_textView?.text,
+                                root.address_textView?.text,
+                                root.comment_textView?.text
+                            )
+                        )
+                        putExtra(Intent.EXTRA_SUBJECT, "Бизнес заявка")
+                    }
+                    // Скопировать текст в буфер.
+                    (root.context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager).apply {
+                        setPrimaryClip(ClipData.newPlainText("Бизнес заявка", getMailText(
+                            adapter,
+                            root.name_textView.text,
+                            root.mail_textView?.text,
+                            root.phone_textView?.text,
+                            root.address_textView?.text,
+                            root.comment_textView?.text
+                        )))
                     }
 
-                    startActivity(intent);
+                    try {
+                        if (emailIntent.resolveActivity(root.context.packageManager) != null) {
+                            startActivity(emailIntent)
+                        }
+                    } catch (e: Exception) {
+                        // Ooooops
+                    }
 
                     if (mAlertDialog.is_delete_cart_checkBox.isChecked) {
                         // Очищение корзины
@@ -191,7 +219,7 @@ class LeadFragment : Fragment() {
         comment: Editable?
     ): String {
         val stringBuilder = StringBuilder()
-        val sysLineSeparator = "<br/>"
+        val sysLineSeparator = "\n"
         if (!name.isNullOrEmpty()) stringBuilder.append("Имя: $name.$sysLineSeparator")
         if (!email.isNullOrEmpty()) stringBuilder.append("Почта: $email.$sysLineSeparator")
         if (!phoneNumber.isNullOrEmpty()) stringBuilder.append("Телефон: $phoneNumber.$sysLineSeparator")
@@ -201,7 +229,7 @@ class LeadFragment : Fragment() {
         for (i in elements.indices) {
             stringBuilder.append("$sysLineSeparator$sysLineSeparator<------ №${i + 1} ------>$sysLineSeparator")
             stringBuilder.append(elements[i].toString().replace("\n", sysLineSeparator))
-            stringBuilder.append("r$sysLineSeparator<------ №${i + 1} ------>$sysLineSeparator$sysLineSeparator")
+            stringBuilder.append("$sysLineSeparator<------ №${i + 1} ------>$sysLineSeparator$sysLineSeparator")
         }
 
         if (!address.isNullOrEmpty())
