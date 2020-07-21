@@ -36,5 +36,6 @@
     <string name="menu_settings">О приложении</string>
     <string name="menu_auth">Личный кабинет</string>
 
+    <string name="auth_ui_phone">Код выслан на номер %1$s</string>
 
 </resources>

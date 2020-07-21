@@ -86,6 +86,7 @@
         app:layout_constraintBottom_toTopOf="@+id/error_textView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.503"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent">
+    </TextView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
