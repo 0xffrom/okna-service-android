@@ -27,8 +27,6 @@ class PersonalCabFragment : Fragment() {
         // TODO: Не начинал ещё делать.
         val root = inflater.inflate(R.layout.fragment_personal, container, false)
 
-        mAuth.currentUser?.updateEmail("andrew@romanyuk.info")
-
         root.button_logout.setOnClickListener{
             mAuth.signOut()
             findNavController().apply {

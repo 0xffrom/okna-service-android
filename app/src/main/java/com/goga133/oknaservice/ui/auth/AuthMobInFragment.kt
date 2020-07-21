@@ -43,7 +43,7 @@ class AuthMobInFragment : Fragment() {
                 root.textInput_phone.text.isNullOrEmpty() -> {
                     showError("Ошибка. Поле для ввода не может быть пусто!")
                 }
-                isCorrectRusNumber(root.textInput_phone.text) -> {
+                !isCorrectRusNumber(root.textInput_phone.text) -> {
                     showError("Ошибка. Введённый номер некорректен!")
                 }
                 else -> {
