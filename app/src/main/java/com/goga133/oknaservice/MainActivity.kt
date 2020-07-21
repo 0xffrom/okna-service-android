@@ -14,7 +14,6 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
-import com.goga133.oknaservice.ui.info.SettingsViewModel
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.navigation.NavigationView
 
@@ -52,7 +51,9 @@ class MainActivity : AppCompatActivity() {
                 R.id.nav_lead,
                 R.id.nav_contacts,
                 R.id.nav_info,
-                R.id.nav_settings
+                R.id.nav_settings,
+                R.id.nav_auth,
+                R.id.nav_personal
             ), drawerLayout
         )
         setupActionBarWithNavController(navController, appBarConfiguration)
