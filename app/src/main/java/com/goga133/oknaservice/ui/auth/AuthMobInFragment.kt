@@ -3,13 +3,10 @@ package com.goga133.oknaservice.ui.auth
 import android.content.ContentValues.TAG
 import android.os.Bundle
 import android.util.Log
-import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.os.postDelayed
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import com.goga133.oknaservice.R
@@ -20,14 +17,17 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
 import com.google.firebase.auth.PhoneAuthCredential
 import com.google.firebase.auth.PhoneAuthProvider
+import kotlinx.android.synthetic.main.fragment_auth_code.*
 import kotlinx.android.synthetic.main.fragment_auth_input_phone.*
 import kotlinx.android.synthetic.main.fragment_auth_input_phone.view.*
+import java.lang.Exception
 import java.util.concurrent.TimeUnit
 
 class AuthMobInFragment : Fragment() {
 
     private val mAuth by lazy { FirebaseAuth.getInstance() }
-    private val mCurrentUser by lazy { mAuth.currentUser }
+    // Код страны (Например: +7):
+    private val countryCode by lazy { getString(R.string.mobile_country_code) }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -36,109 +36,85 @@ class AuthMobInFragment : Fragment() {
     ): View? {
 
         val root = inflater.inflate(R.layout.fragment_auth_input_phone, container, false)
-        val authViewModel = ViewModelProvider(this)[AuthViewModel::class.java]
 
-
-        root.textInput_phone.setOnKeyListener(object : View.OnKeyListener {
-            override fun onKey(v: View?, keyCode: Int, event: KeyEvent?): Boolean {
-                if (event != null) {
-                    if (event.action == KeyEvent.ACTION_DOWN && keyCode == KeyEvent.KEYCODE_ENTER) {
-                        sendMobileCode(root)
-                        return true
+        root.button_continue.setOnClickListener {
+            // Если нет ошибки, связанной с валидацией номера, отправляем код, иначе - показываем ошибку:
+            when {
+                root.textInput_phone.text.isNullOrEmpty() -> {
+                    showError("Ошибка. Поле для ввода не может быть пусто!")
+                }
+                isCorrectRusNumber(root.textInput_phone.text) -> {
+                    showError("Ошибка. Введённый номер некорректен!")
+                }
+                else -> {
+                    // Пробуем отослать код:
+                    try {
+                        sendMobileCode()
+                    }
+                    catch (e : Exception){
+                        showError("Ошибка. Повторите запрос позже!")
+                        setLoading(false)
                     }
                 }
-                return false
             }
-        })
-
-        // Кнопка далее:
-        root.button_continue.setOnClickListener {
-            // Если нет ошибки, связанной с валидацией номера и текст не пуст:
-            sendMobileCode(root)
         }
         return root
     }
 
-    private fun sendMobileCode(root: View) {
-        if (!root.textInput_phone.text.isNullOrEmpty() && root.textInput_phone.error == null && isCorrectRusNumber(
-                root.textInput_phone.text
-            )
-        ) {
-            root.button_continue.isEnabled = false
-            root.login_progressbar.visibility = View.VISIBLE
+    private fun sendMobileCode() {
+        setLoading(true)
 
-            val phoneNumber = "+7" + root.textInput_phone.text
+        val phoneNumber = countryCode + textInput_phone.text
 
-            val phoneAuthProvider = PhoneAuthProvider.getInstance()
-            phoneAuthProvider.verifyPhoneNumber(phoneNumber,
-                120L,
-                TimeUnit.SECONDS,
-                requireActivity(),
-                object : PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
+        val phoneAuthProvider = PhoneAuthProvider.getInstance()
+        phoneAuthProvider.verifyPhoneNumber(phoneNumber,
+            120L,
+            TimeUnit.SECONDS,
+            requireActivity(),
+            object : PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
 
-                    override fun onVerificationCompleted(credential: PhoneAuthCredential) {
-                        signInWithPhoneAuthCredential(credential)
+                override fun onVerificationCompleted(credential: PhoneAuthCredential) {
+                    // Если всё хорошо - выполняем вход в аккаунт ещё до перехода на следующий фрагмент:
+                    signInWithPhoneAuthCredential(credential)
+                    setLoading(false)
+                }
 
-                        Log.d(TAG, "onVerificationCompleted:$credential")
-
-
+                override fun onVerificationFailed(e: FirebaseException) {
+                    when (e) {
+                        is FirebaseTooManyRequestsException -> showError("Ошибка. Превышен лимит запросов, повторите попытку позже!")
+                        is FirebaseNetworkException -> showError("Ошибка. Проверьте подключение к интернету!")
+                        else -> showError("Ошибка. Повторите запрос позже!")
                     }
 
-                    override fun onVerificationFailed(e: FirebaseException) {
+                    setLoading(false)
+                }
 
-                        Log.w(TAG, "onVerificationFailed", e)
-                        root.textView_error.visibility = View.VISIBLE
-
-                        when (e) {
-                            is FirebaseTooManyRequestsException -> {
-                                root.textView_error.text =
-                                    "Ошибка. Превышен лимит запросов, повторите попытку позже."
+                override fun onCodeSent(
+                    verificationId: String,
+                    token: PhoneAuthProvider.ForceResendingToken) {
+                    super.onCodeSent(verificationId, token)
+                    // Ждём 10 секунд, чтобы код был введён в автоматическом режиме,
+                    // иначе вводим код в ручном режиме:
+                    android.os.Handler().postDelayed(
+                        {
+                            val args = Bundle().apply {
+                                putString("verificationId", verificationId)
+                                putString("phoneNumber", phoneNumber)
                             }
-                            is FirebaseNetworkException -> {
-                                root.textView_error.text =
-                                    "Ошибка. Проверьте подключение к интернету."
-                            }
-                            else -> {
-                                root.textView_error.text =
-                                    "Ошибка. Попробуйте повторить запрос позже."
-                            }
-                        }
 
-                        root.button_continue.isEnabled = true
-                        root.login_progressbar.visibility = View.INVISIBLE
-                    }
+                            setLoading(false)
+                            findNavController().navigate(R.id.nav_auth_code_phone, args)
+                        }, 10000
+                    );
+                }
+            })
 
-                    override fun onCodeSent(
-                        verificationId: String,
-                        token: PhoneAuthProvider.ForceResendingToken
-                    ) {
-                        root.textView_error.visibility = View.INVISIBLE
-                        super.onCodeSent(verificationId, token)
-                        android.os.Handler().postDelayed(
-                            {
-                                val args = Bundle().apply {
-                                    putString("verificationId", verificationId)
-                                    putString("phoneNumber", phoneNumber)
-                                }
-
-                                root.findNavController()
-                                    .navigate(R.id.nav_auth_code_phone, args)
-                            }, 10000);
-                    }
-                })
-        } else {
-            root.textView_error.visibility = View.VISIBLE
-            root.textView_error.text = "Ошибка. Попробуйте повторить запрос позже."
-        }
     }
 
     private fun signInWithPhoneAuthCredential(credential: PhoneAuthCredential) {
         mAuth.signInWithCredential(credential)
             .addOnCompleteListener(this.requireActivity()) { task ->
                 if (task.isSuccessful) {
-                    Log.d(TAG, "signInWithCredential:success")
-                    val user = task.result?.user
-
                     val navController = findNavController()
 
                     // Чистим стек фрагментов:
@@ -147,15 +123,24 @@ class AuthMobInFragment : Fragment() {
                     // Отправляем на нужный фрагмент:
                     navController.navigate(R.id.nav_personal);
 
-                } else {
-                    // Sign in failed, display a message and update the UI
-                    Log.w(TAG, "signInWithCredential:failure", task.exception)
-                    if (task.exception is FirebaseAuthInvalidCredentialsException) {
-                        textView_error.visibility = View.VISIBLE
-                        textView_error.text = "Неверный код. Попробуйте ещё раз."
-                    }
+                } else if (task.exception is FirebaseAuthInvalidCredentialsException) {
+                    showError("Ошибка. Неверно введённый код.")
                 }
             }
+    }
+
+    private fun showError(error : String){
+        textView_error.visibility = View.VISIBLE
+        textView_error.text = error
+    }
+
+    // Выставляем ProgressBar и делаем кнопку включённой или нет:
+    private fun setLoading(loading: Boolean) {
+        button_continue.isEnabled = !loading
+        when (loading) {
+            true -> login_progressbar.visibility = View.VISIBLE
+            false -> login_progressbar.visibility = View.INVISIBLE
+        }
     }
 
     private fun isCorrectRusNumber(target: CharSequence?): Boolean {

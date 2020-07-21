@@ -1,8 +1,6 @@
 package com.goga133.oknaservice.ui.auth
 
-import android.content.ContentValues.TAG
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -15,6 +13,7 @@ import com.google.firebase.auth.PhoneAuthCredential
 import com.google.firebase.auth.PhoneAuthProvider
 import kotlinx.android.synthetic.main.fragment_auth_code.*
 import kotlinx.android.synthetic.main.fragment_auth_code.view.*
+import kotlinx.android.synthetic.main.fragment_auth_input_phone.*
 
 class AuthMobCodeFragment : Fragment() {
 
@@ -43,15 +42,15 @@ class AuthMobCodeFragment : Fragment() {
     }
 
     private fun onCheckCode() {
+        // otp - код, который ввёл пользователь.
         val otp = otp_editText.text.toString()
+
         when {
             otp.isEmpty() -> {
-                error_textView.visibility = View.VISIBLE
-                error_textView.text = "Ошибка. Поле ввода пусто."
+                showError("Ошибка. Поле ввода не может быть пусто!")
             }
             otp.length < 6 -> {
-                error_textView.visibility = View.VISIBLE
-                error_textView.text = "Ошибка. Введите шестизначный код из смс!"
+                showError("Ошибка. Введите шестизначный код из смс!")
             }
             else -> {
                 setLoading(true)
@@ -65,8 +64,7 @@ class AuthMobCodeFragment : Fragment() {
                     signInWithPhoneAuthCredential(credential)
                 } catch (e: Exception) {
                     // На всякий случай.
-                    error_textView.visibility = View.VISIBLE
-                    error_textView.text = "Ошибка. Попробуйте ещё раз."
+                    showError("Ошибка. Попробуйте ещё раз!")
                 }
 
                 setLoading(false)
@@ -93,12 +91,10 @@ class AuthMobCodeFragment : Fragment() {
                 // Если код подтверждения неверный:
                 else {
                     if (task.exception is FirebaseAuthInvalidCredentialsException) {
-                        error_textView.visibility = View.VISIBLE
-                        error_textView.text = "Ошибка. Неверный введённый код."
+                        showError("Ошибка. Вы ввели неверный код!")
                     }
                     else{
-                        error_textView.visibility = View.VISIBLE
-                        error_textView.text = "Ошибка. Попробуйте ещё раз."
+                        showError("Ошибка. Попробуйте ещё раз!")
                     }
                 }
             }
@@ -111,6 +107,11 @@ class AuthMobCodeFragment : Fragment() {
             true -> otp_progressbar.visibility = View.VISIBLE
             false -> otp_progressbar.visibility = View.INVISIBLE
         }
+    }
+
+    private fun showError(error : String){
+        error_textView.visibility = View.VISIBLE
+        error_textView.text = error
     }
 }
 

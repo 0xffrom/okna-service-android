@@ -13,7 +13,7 @@
         android:layout_height="wrap_content"
         android:layout_margin="10dp"
         android:gravity="center"
-        android:text="Подтверждение номера мобильного телефона"
+        android:text="@string/auth_ui_confirm_mobile"
         android:textColor="@color/colorPrimaryText"
         android:textSize="18sp"
         android:textStyle="bold"
@@ -35,7 +35,7 @@
             android:layout_height="wrap_content"
             android:layout_margin="5dp"
             android:enabled="false"
-            android:hint="+7"
+            android:hint="@string/mobile_country_code"
             android:padding="16dp"
             android:textSize="18sp" />
 
@@ -55,7 +55,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="40dp"
-        android:text="Далее"
+        android:text="@string/button_continue"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -66,8 +66,8 @@
         android:id="@+id/login_progressbar"
         android:layout_width="18dp"
         android:layout_height="18dp"
-        android:visibility="invisible"
         android:layout_marginEnd="18dp"
+        android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="@+id/button_continue"
         app:layout_constraintEnd_toEndOf="@+id/button_continue"
         app:layout_constraintTop_toTopOf="@+id/button_continue" />
@@ -76,10 +76,10 @@
         android:id="@+id/textView_error"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintEnd_toEndOf="parent"
         android:layout_margin="5dp"
         android:gravity="center"
         android:textColor="@color/design_default_color_error"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/button_continue" />
 

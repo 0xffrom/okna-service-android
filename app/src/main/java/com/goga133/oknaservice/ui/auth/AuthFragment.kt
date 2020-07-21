@@ -38,16 +38,13 @@ class AuthFragment : Fragment() {
 
     override fun onStart() {
         super.onStart()
+        // Если пользователь авторизован, отправляем его в ЛК:
         if(mCurrentUser != null){
-
             findNavController().apply {
                 popBackStack(R.id.nav_auth, true);
                 navigate(R.id.nav_personal)}
-            Log.d(TAG, "Авторизованный пользователь.")
         }
-        else{
-            Log.d(TAG, "Пользователь неавторизован.")
-        }
+
     }
 }
 
