@@ -1,138 +1,148 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:padding="10dp"
-    tools:context=".ui.lead.LeadFragment">
+    android:layout_height="match_parent">
 
-    <androidx.core.widget.NestedScrollView
-        android:id="@+id/main_info_layout"
+    <LinearLayout
+        android:id="@+id/linearLayout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:padding="10dp"
+        tools:context=".ui.lead.LeadFragment">
 
-        <LinearLayout
+        <androidx.core.widget.NestedScrollView
+            android:id="@+id/main_info_layout"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:layout_height="wrap_content">
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/list_products"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="10dp" />
+                android:orientation="vertical">
 
-            <com.google.android.material.textview.MaterialTextView
-                android:id="@+id/isDelivery_textView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:autoSizeTextType="uniform" />
-
-            <com.google.android.material.textview.MaterialTextView
-                android:id="@+id/sum_textView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="10dp"
-                android:text="@{price.}"
-                app:autoSizeTextType="uniform" />
-
-            <com.google.android.material.textfield.TextInputLayout
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:hint="Имя"
-                android:textSize="18sp">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    style="@style/Widget.AppCompat.EditText"
-                    android:id="@+id/name_textView"
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/list_products"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="textPersonName" />
+                    android:layout_marginBottom="10dp" />
 
-            </com.google.android.material.textfield.TextInputLayout>
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/isDelivery_textView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:autoSizeTextType="uniform" />
 
-            <com.google.android.material.textfield.TextInputLayout
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:hint="Почта"
-                android:textSize="18sp">
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/sum_textView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
+                    android:text="@{price.}"
+                    app:autoSizeTextType="uniform" />
 
-                <com.google.android.material.textfield.TextInputEditText
-                    style="@style/Widget.AppCompat.EditText"
-                    android:id="@+id/mail_textView"
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/name_textInputLayout"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="textEmailAddress" />
+                    android:gravity="center"
+                    android:hint="Имя"
+                    android:textSize="18sp">
 
-            </com.google.android.material.textfield.TextInputLayout>
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/name_textView"
+                        style="@style/Widget.AppCompat.EditText"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="textPersonName" />
 
-            <com.google.android.material.textfield.TextInputLayout
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:hint="Телефон"
-                android:textSize="18sp">
+                </com.google.android.material.textfield.TextInputLayout>
 
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/phone_textView"
-                    style="@style/Widget.AppCompat.EditText"
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/mail_textInputLayout"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="phone" />
-            </com.google.android.material.textfield.TextInputLayout>
+                    android:gravity="center"
+                    android:hint="Почта"
+                    android:textSize="18sp">
 
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/mail_textView"
+                        style="@style/Widget.AppCompat.EditText"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="textEmailAddress" />
 
-            <com.google.android.material.textfield.TextInputLayout
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                android:id="@+id/address_textInputLayout"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:hint="Адрес доставки"
-                android:textSize="18sp">
+                </com.google.android.material.textfield.TextInputLayout>
 
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/address_textView"
-                    style="@style/Widget.AppCompat.EditText"
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/phone_textInputLayout"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="textLongMessage" />
-            </com.google.android.material.textfield.TextInputLayout>
+                    android:gravity="center"
+                    android:hint="Телефон"
+                    android:textSize="18sp">
 
-            <com.google.android.material.textfield.TextInputLayout
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:hint="Комментарий к заказу"
-                android:textSize="18sp">
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/comment_textView"
-                    style="@style/Widget.AppCompat.EditText"
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/phone_textView"
+                        style="@style/Widget.AppCompat.EditText"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="phone" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/address_textInputLayout"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="textLongMessage" />
-            </com.google.android.material.textfield.TextInputLayout>
+                    android:gravity="center"
+                    android:hint="Адрес доставки"
+                    android:textSize="18sp">
 
 
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/make_lead_button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_margin="10dp"
-                android:gravity="center"
-                android:text="Отправить заявку" />
-        </LinearLayout>
-    </androidx.core.widget.NestedScrollView>
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/address_textView"
+                        style="@style/Widget.AppCompat.EditText"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="textLongMessage" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:hint="Комментарий к заказу"
+                    android:textSize="18sp">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/comment_textView"
+                        style="@style/Widget.AppCompat.EditText"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="textLongMessage" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/make_lead_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_margin="10dp"
+                    android:gravity="center"
+                    android:text="Отправить заявку" />
+            </LinearLayout>
+        </androidx.core.widget.NestedScrollView>
+    </LinearLayout>
 
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/cart_null_textView"
@@ -141,5 +151,9 @@
         android:layout_gravity="center"
         android:gravity="center"
         android:text="Корзина пуста"
-        android:textSize="18sp" />
-</LinearLayout>
+        android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -12,11 +12,10 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.goga133.oknaservice.R
-import com.goga133.oknaservice.models.Calculator
 import com.goga133.oknaservice.models.Product
 import com.goga133.oknaservice.ui.lead.LeadViewModel
 import com.google.android.material.snackbar.Snackbar
-import kotlinx.android.synthetic.main.adapter_product.view.*
+import kotlinx.android.synthetic.main.model_product.view.*
 
 
 
@@ -53,7 +52,7 @@ class ProductsAdapter(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ProductHolder {
         val itemView =
-            LayoutInflater.from(parent.context).inflate(R.layout.adapter_product, parent, false)
+            LayoutInflater.from(parent.context).inflate(R.layout.model_product, parent, false)
         return ProductHolder(itemView)
     }
 
@@ -61,6 +60,7 @@ class ProductsAdapter(
         Glide.with(context)
             .load(getItem(position).windowIdResource)
             .into(holder.imageView)
+
         holder.description.text = getItem(position).toString()
         holder.deleteProductButton.setOnClickListener(OnClickRemoveItem(leadViewModel, getItem(position)))
     }

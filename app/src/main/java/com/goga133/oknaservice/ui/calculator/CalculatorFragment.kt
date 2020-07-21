@@ -3,9 +3,12 @@ package com.goga133.oknaservice.ui.calculator
 import android.app.AlertDialog
 import android.graphics.Color
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.EditText
 import android.widget.SeekBar
 import android.widget.TextView
 import android.widget.Toast
@@ -19,6 +22,7 @@ import com.goga133.oknaservice.models.Calculator
 import com.goga133.oknaservice.models.Product
 import com.google.android.material.button.MaterialButtonToggleGroup
 import com.google.android.material.snackbar.Snackbar
+import com.google.android.material.textfield.TextInputLayout
 import com.smarteist.autoimageslider.IndicatorView.animation.type.IndicatorAnimationType
 import com.smarteist.autoimageslider.SliderAnimations
 import com.smarteist.autoimageslider.SliderPager
@@ -54,11 +58,11 @@ class CalculatorFragment : Fragment() {
         val listener = OnSeekBarChangeListener(fun(seekBar: SeekBar?, progress: Int): Unit {
             when (seekBar) {
                 widthSeekBar -> {
-                    widthTextView.text = "Длина: ${progress + (currentWindow.minW)} см."
+                    widthTextView.text = "Длина: ${progress + (currentWindow.minW)} мм."
                     w = progress + currentWindow.minW
                 }
                 heightSeekBar -> {
-                    heightTextView.text = "Высота: ${progress + (currentWindow.minH)} см."
+                    heightTextView.text = "Высота: ${progress + (currentWindow.minH)} мм."
                     h = progress + currentWindow.minH
                 }
             }
@@ -170,22 +174,33 @@ class CalculatorFragment : Fragment() {
             val mAlertDialog = mBuilder.show()
 
             mAlertDialog.text_view_dialog_height.hint =
-                "Высота окна (от ${currentWindow.minH} до ${currentWindow.maxH} см.)"
+                "Высота окна (от ${currentWindow.minH} до ${currentWindow.maxH} мм.)"
             mAlertDialog.text_view_dialog_width.hint =
-                "Длина окна (от ${currentWindow.minW} до ${currentWindow.maxW} см.)"
+                "Длина окна (от ${currentWindow.minW} до ${currentWindow.maxW} мм.)"
+
+            mAlertDialog.text_view_dialog_width.validate(
+                "Задайте значение из нужного диапазона.",
+                mAlertDialog.dialog_input_value_width
+            )
+            { s -> isCorrectInput(s, currentWindow.minW, currentWindow.maxW) }
+            mAlertDialog.text_view_dialog_height.validate(
+                "Задайте значение из нужного диапазона.",
+                mAlertDialog.dialog_input_value_height
+            )
+            { s -> isCorrectInput(s, currentWindow.minH, currentWindow.maxH) }
 
             mAlertDialog.dialog_button_set.setOnClickListener {
-                if (mAlertDialog.dialog_input_value_width.text.toString()
-                        .isEmpty() || mAlertDialog.dialog_input_value_width.text.toString().toInt()
-                        .let { x -> x < currentWindow.minW || x > currentWindow.maxW } ||
+                if (mAlertDialog.text_view_dialog_width.error != null ||
+                    mAlertDialog.dialog_input_value_width.text.toString()
+                        .isEmpty() ||
+                    mAlertDialog.text_view_dialog_height.error != null ||
                     mAlertDialog.dialog_input_value_height.text.toString()
-                        .isEmpty() || mAlertDialog.dialog_input_value_height.text.toString().toInt()
-                        .let { x -> x < currentWindow.minH || x > currentWindow.maxH }
+                        .isEmpty()
                 )
                     Toast.makeText(
                         root.context,
-                        "Введите размеры из заданного диапазона",
-                        Toast.LENGTH_SHORT
+                        "Пожалуйста, введите размеры из заданного диапазона",
+                        Toast.LENGTH_LONG
                     ).show()
                 else {
                     widthSeekBar.progress = mAlertDialog.dialog_input_value_width.text.toString()
@@ -212,34 +227,60 @@ class CalculatorFragment : Fragment() {
             indicatorUnselectedColor = Color.GRAY
         }
         sliderView.sliderPager.addOnPageChangeListener(
-                object : SliderPager.OnPageChangeListener {
-                    override fun onPageScrollStateChanged(state: Int) {
-                        //
-                    }
+            object : SliderPager.OnPageChangeListener {
+                override fun onPageScrollStateChanged(state: Int) {
+                    //
+                }
 
-                    override fun onPageScrolled(
-                        position: Int,
-                        positionOffset: Float,
-                        positionOffsetPixels: Int
-                    ) {
-                        //
-                    }
+                override fun onPageScrolled(
+                    position: Int,
+                    positionOffset: Float,
+                    positionOffsetPixels: Int
+                ) {
+                    //
+                }
 
-                    override fun onPageSelected(position: Int) {
-                        currentWindow =
-                            Calculator().chooseWindow(sliderAdapter.getItemAt(position).windowId)
-                        windowId = sliderAdapter.getItemAt(position).windowId
-                        heightSeekBar.max = currentWindow.maxH - currentWindow.minH
-                        widthSeekBar.max = currentWindow.maxW - currentWindow.minW
+                override fun onPageSelected(position: Int) {
+                    currentWindow =
+                        Calculator().chooseWindow(sliderAdapter.getItemAt(position).windowId)
+                    windowId = sliderAdapter.getItemAt(position).windowId
+                    heightSeekBar.max = currentWindow.maxH - currentWindow.minH
+                    widthSeekBar.max = currentWindow.maxW - currentWindow.minW
 
-                        heightSeekBar.progress = 0
-                        widthSeekBar.progress = 0
-                    }
-                })
+                    heightSeekBar.progress = 0
+                    widthSeekBar.progress = 0
+                }
+            })
 
         return sliderAdapter
     }
 
+    private fun isCorrectInput(target: CharSequence?, minValue: Int, maxValue: Int): Boolean {
+        return (target.toString().toIntOrNull() ?: -1) >= minValue && (target.toString()
+            .toIntOrNull() ?: -1) <= maxValue
+    }
+
+    private fun TextInputLayout.validate(
+        message: String,
+        editText: EditText,
+        validator: (String) -> Boolean
+    ) {
+        editText.afterTextChanged {
+            this.error = if (validator(it)) null else message
+        }
+    }
+
+    private fun EditText.afterTextChanged(afterTextChanged: (String) -> Unit) {
+        this.addTextChangedListener(object : TextWatcher {
+            override fun afterTextChanged(s: Editable?) {
+                afterTextChanged.invoke(s.toString())
+            }
+
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+        })
+    }
 
     private lateinit var summaryPrice: Calculator.SummaryPrice
 
@@ -264,7 +305,8 @@ class CalculatorFragment : Fragment() {
             isWinSlope, isWinGrid, isWinInstall, isWinDelivery
         )
 
-        root.add_cart_button.text = "Добавить в корзину (${summaryPrice.sum + summaryPrice.sumD} р.)"
+        root.add_cart_button.text =
+            "Добавить в корзину (${summaryPrice.sum + summaryPrice.sumD} р.)"
         root.text_view_sumW.text = "Стоимость окна: ${summaryPrice.sumW} р."
         root.text_view_sumO.text = "Стоимость опций: ${summaryPrice.sumO} р."
         root.text_view_sumD.text = "Стоимость доставки: ${summaryPrice.sumD} р."

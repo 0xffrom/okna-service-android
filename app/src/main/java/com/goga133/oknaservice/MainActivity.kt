@@ -8,12 +8,12 @@ import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.drawerlayout.widget.DrawerLayout
+import androidx.lifecycle.*
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
-import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.navigation.NavigationView
 
@@ -21,6 +21,11 @@ import com.google.android.material.navigation.NavigationView
 class MainActivity : AppCompatActivity() {
 
     private lateinit var appBarConfiguration: AppBarConfiguration
+    private lateinit var mainViewModel: MainViewModel
+
+    private lateinit var siteUrl : String
+    private lateinit var phoneNumber : String
+    private lateinit var emailAddress : String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,16 +37,29 @@ class MainActivity : AppCompatActivity() {
         val navView: NavigationView = findViewById(R.id.nav_view)
         val navController = findNavController(R.id.nav_host_fragment)
 
+        // ViewModel
+        mainViewModel = ViewModelProviders.of(this).get(MainViewModel::class.java);
+        mainViewModel.emailAddress.observe(this, Observer { emailAddress = it })
+        mainViewModel.phoneNumber.observe(this, Observer { phoneNumber = it })
+        mainViewModel.siteUrl.observe(this, Observer { siteUrl = it })
+        // View Model
 
         appBarConfiguration = AppBarConfiguration(
             setOf(
-                R.id.nav_home, R.id.nav_calculator, R.id.nav_lead, R.id.nav_info, R.id.nav_contacts
+                R.id.nav_home,
+                R.id.nav_calculator,
+                R.id.nav_lead,
+                R.id.nav_contacts,
+                R.id.nav_info,
+                R.id.nav_settings,
+                R.id.nav_auth,
+                R.id.nav_personal
             ), drawerLayout
         )
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
 
-        val fab: ExtendedFloatingActionButton = findViewById(R.id.fab)
+        val fab: FloatingActionButton = findViewById(R.id.fab)
         fab.setOnClickListener {
             if (navController.currentDestination?.id != R.id.nav_calculator)
                 navController.navigate(R.id.nav_calculator)
@@ -63,18 +81,33 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         // Inflate the menu; this adds items to the action bar if it is present.
-        menuInflater.inflate(R.menu.main, menu)
+        menuInflater.inflate(R.menu.toolbar_menu, menu)
         return true
     }
 
+    // Обработчик нажатия на иконку на тулбаре сверху:
     override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {
+        // Открытие звонилки:
         R.id.action_call -> {
-            val intent = Intent(Intent.ACTION_DIAL)
-            intent.data = Uri.parse(getString(R.string.telephone))
-            startActivity(intent)
+            startActivity(Intent(Intent.ACTION_DIAL).apply {
+                data = Uri.parse("tel:$phoneNumber")
+            })
             true
         }
-
+        // Открытие почты:
+        R.id.action_mail -> {
+            startActivity(Intent(Intent.ACTION_VIEW).apply {
+                data = Uri.parse("mailto:$emailAddress")
+            })
+            true
+        }
+        // Открытие браузера:
+        R.id.action_web -> {
+            startActivity(Intent(Intent.ACTION_VIEW).apply {
+                data = Uri.parse(siteUrl)
+            })
+            true
+        }
         else -> {
             // If we got here, the user's action was not recognized.
             // Invoke the superclass to handle it.
