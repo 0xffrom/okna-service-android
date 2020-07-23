@@ -38,12 +38,13 @@
 
     <string name="auth_ui_phone">Код выслан на номер %1$s</string>
     <string name="mobile_country_code">+7</string>
-    <string name="auth_ui_confirm_mobile">Подтверждение номера мобильного телефона</string>
+    <string name="auth_ui_confirm_mobile">Введите свой номер телефона</string>
     <string name="button_continue">Далее</string>
     <string name="button_accept">Подтвердить</string>
     <string name="auth_ui_hint_code_from_sms">Код из смс</string>
     <string name="auth_ui_input_code">Введите код подтверждения</string>
     <string name="auth_ui_auth_in">Войдите, чтобы сделать заказ</string>
     <string name="auth_ui_greeting">Добро пожаловать!</string>
+    <string name="auth_ui_login_by_email">Войти с помощью Email</string>
 
 </resources>

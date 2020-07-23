@@ -69,10 +69,10 @@ class MainActivity : AppCompatActivity() {
 
         navController.addOnDestinationChangedListener { controller, destination, arguments ->
             run {
-                if (destination.id == R.id.nav_calculator || destination.id == R.id.nav_lead)
-                    fab.hide()
-                else
+                if (destination.id == R.id.nav_home)
                     fab.show()
+                else
+                    fab.hide()
             }
         }
 
@@ -81,7 +81,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         // Inflate the menu; this adds items to the action bar if it is present.
-        menuInflater.inflate(R.menu.toolbar_menu, menu)
+        menuInflater.inflate(R.menu.toolbar_main, menu)
         return true
     }
 

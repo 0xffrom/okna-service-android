@@ -13,7 +13,6 @@ import com.google.firebase.auth.PhoneAuthCredential
 import com.google.firebase.auth.PhoneAuthProvider
 import kotlinx.android.synthetic.main.fragment_auth_code.*
 import kotlinx.android.synthetic.main.fragment_auth_code.view.*
-import kotlinx.android.synthetic.main.fragment_auth_input_phone.*
 
 class AuthMobCodeFragment : Fragment() {
 
@@ -22,12 +21,14 @@ class AuthMobCodeFragment : Fragment() {
     private lateinit var verificationId: String
     private lateinit var phoneNumber: String
 
+    private lateinit var root : View
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val root = inflater.inflate(R.layout.fragment_auth_code, container, false)
+        root = inflater.inflate(R.layout.fragment_auth_code, container, false)
 
         verificationId = this.arguments?.getString("verificationId").orEmpty()
         phoneNumber = this.arguments?.getString("phoneNumber").orEmpty()
@@ -77,9 +78,9 @@ class AuthMobCodeFragment : Fragment() {
         mAuth.signInWithCredential(credential)
             .addOnCompleteListener(this.requireActivity()) { task ->
                 // Если код подтверждения верный:
-                if (task.isSuccessful) {
-                    val navController = findNavController()
+                if (task.isSuccessful && isVisible) {
 
+                    val navController = findNavController()
                     // Чистим стек фрагментов:
                     navController.popBackStack(R.id.nav_auth_input_phone, true);
                     navController.popBackStack(R.id.nav_auth, true);
@@ -102,16 +103,21 @@ class AuthMobCodeFragment : Fragment() {
 
     // Выставляем ProgressBar и делаем кнопку включённой или нет:
     private fun setLoading(loading: Boolean) {
-        button_otp.isEnabled = !loading
-        when (loading) {
-            true -> otp_progressbar.visibility = View.VISIBLE
-            false -> otp_progressbar.visibility = View.INVISIBLE
+        if(isVisible) {
+            root.button_otp.isEnabled = !loading
+            when (loading) {
+                true -> root.otp_progressbar.visibility = View.VISIBLE
+                false -> root.otp_progressbar.visibility = View.INVISIBLE
+            }
         }
     }
 
+
     private fun showError(error : String){
-        error_textView.visibility = View.VISIBLE
-        error_textView.text = error
+        if(isVisible) {
+            root.error_textView.visibility = View.VISIBLE
+            root.error_textView.text = error
+        }
     }
 }
 
