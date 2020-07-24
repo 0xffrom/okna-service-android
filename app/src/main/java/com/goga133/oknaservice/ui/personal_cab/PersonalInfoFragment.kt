@@ -65,8 +65,10 @@ class PersonalInfoFragment : Fragment() {
                 }
                 // Поле от почты не пусто:
                 else {
+                    val newEmail = emailField.text.toString()
+                    val oldEmail = mCurrentUser.email
                     // Поле от почты можно обновить -> обновляем почту и имя.
-                    if (emailField.isEnabled) {
+                    if (newEmail != oldEmail) {
                         if (newName != mCurrentUser.displayName)
                             updateName(newName)
                         updateEmail(emailField.text.toString())
@@ -108,12 +110,14 @@ class PersonalInfoFragment : Fragment() {
         }
     }
 
+    // TODO: Вбахать во все фрагменты ScrollView
+    // TODO: error поле когда почта неверна, а когда только обновил - значок ожидания.
+
     private fun updateEmail(newEmail: String) {
-        mCurrentUser.verifyBeforeUpdateEmail(newEmail.replace(" ", "")).addOnCompleteListener { task ->
-            // TODO: Обновление почты прям в интерфейсе.
+        mCurrentUser.updateEmail(newEmail.replace(" ", "")).addOnCompleteListener { task ->
             if (isCorrectView()) {
                 if (task.isSuccessful) {
-                    showMessage("Письмо для подтверждения отправлено. Проверьте Вашу почту!", true)
+                    showMessage("Почта была успешно добавлена!", true)
                 } else if (task.isCanceled) {
                     showMessage("Ошибка. Повторите попытку позже!", true)
                 }
@@ -153,7 +157,6 @@ class PersonalInfoFragment : Fragment() {
             if (!email.isNullOrEmpty()) {
                 personal_info_email_editText.apply {
                     setText(email)
-                    isEnabled = false
                 }
                 personal_info_email_textInputLayout.apply {
                     endIconMode = TextInputLayout.END_ICON_CUSTOM

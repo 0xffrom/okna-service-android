@@ -11,7 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         app:layout_constrainedHeight="true"
-        app:layout_constraintBottom_toTopOf="@+id/personal_info_save_changes_button"
+        app:layout_constraintBottom_toTopOf="@+id/personal_info_call_me"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -79,27 +79,24 @@
                     android:hint="Почта" />
             </com.google.android.material.textfield.TextInputLayout>
             <com.google.android.material.button.MaterialButton
-                android:text="Сменить почту"
+                android:id="@+id/personal_info_save_changes_button"
+                android:text="Сохранить изменения"
                 style="@style/Widget.MaterialComponents.Button.OutlinedButton"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"/>
-            <com.google.android.material.button.MaterialButton
-                android:text="Сменить пароль"
-                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
+
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
 
 
     <com.google.android.material.button.MaterialButton
-        android:id="@+id/personal_info_save_changes_button"
+        android:id="@+id/personal_info_call_me"
+        android:text="Позвоните мне!"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_gravity="bottom"
         android:layout_margin="5dp"
-        android:text="Сохранить изменения"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
