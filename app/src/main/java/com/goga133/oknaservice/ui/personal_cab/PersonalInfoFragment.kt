@@ -112,6 +112,8 @@ class PersonalInfoFragment : Fragment() {
 
     // TODO: Вбахать во все фрагменты ScrollView
     // TODO: error поле когда почта неверна, а когда только обновил - значок ожидания.
+    // TODO: [FIX] Имя не изменялось, но выскакивает: Имя успешно обновлено
+    // TODO: [FIX] Подчёркивает красным имя и почту.
 
     private fun updateEmail(newEmail: String) {
         mCurrentUser.updateEmail(newEmail.replace(" ", "")).addOnCompleteListener { task ->
