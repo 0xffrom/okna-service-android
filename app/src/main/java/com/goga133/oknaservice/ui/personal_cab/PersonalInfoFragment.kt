@@ -3,7 +3,9 @@ package com.goga133.oknaservice.ui.personal_cab
 import android.content.res.ColorStateList
 import android.os.Bundle
 import android.text.Editable
+import android.text.TextUtils
 import android.util.Log
+import android.util.Patterns
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -34,6 +36,8 @@ class PersonalInfoFragment : Fragment() {
             val nameField = root.personal_info_name_editText
             val surnameField = root.personal_info_surname_editText
 
+            val oldEmail = mCurrentUser.email;
+            val newEmail = emailField.text.toString();
             // Если имя и фамилия пусты:
             if (nameField.text.isNullOrEmpty() && surnameField.text.isNullOrEmpty()) {
                 // Поле от почты тоже пусто -> Ошибка.
@@ -42,7 +46,7 @@ class PersonalInfoFragment : Fragment() {
                 // Почта не пуста:
                 else {
                     // Почту можно обновить? Да -> обновляем, нет -> ошибка.
-                    if (emailField.isEnabled)
+                    if (oldEmail != newEmail)
                         updateEmail(emailField.text.toString())
                     else
                         showMessage("Ошибка. Вы ничего не заполнили!")
@@ -60,13 +64,11 @@ class PersonalInfoFragment : Fragment() {
                 val newName =
                     "${root.personal_info_name_editText.text} ${root.personal_info_surname_editText.text}"
                 // Поле от почты пусто -> обновляем имя.
-                if (emailField.text.isNullOrEmpty() && newName != mCurrentUser.displayName) {
+                if ((emailField.text.isNullOrEmpty() || newEmail == oldEmail) && newName != mCurrentUser.displayName) {
                         updateName(newName)
                 }
                 // Поле от почты не пусто:
                 else {
-                    val newEmail = emailField.text.toString()
-                    val oldEmail = mCurrentUser.email
                     // Поле от почты можно обновить -> обновляем почту и имя.
                     if (newEmail != oldEmail) {
                         if (newName != mCurrentUser.displayName)
@@ -83,16 +85,18 @@ class PersonalInfoFragment : Fragment() {
     }
 
     private fun updateName(newName: String) {
-        val profileUpdates = userProfileChangeRequest {
-            displayName = newName
-        }
-        mCurrentUser.updateProfile(profileUpdates).addOnCompleteListener { task ->
-            if (isVisible) {
-                if (task.isSuccessful) {
-                    showMessage("Имя успешно обновлено!")
-                }
-                if (task.isCanceled) {
-                    showMessage("Ошибка. Не удалось обновить имя!")
+        if (mCurrentUser.displayName != newName) {
+            val profileUpdates = userProfileChangeRequest {
+                displayName = newName
+            }
+            mCurrentUser.updateProfile(profileUpdates).addOnCompleteListener { task ->
+                if (isVisible) {
+                    if (task.isSuccessful) {
+                        showMessage("Имя успешно обновлено!")
+                    }
+                    if (task.isCanceled) {
+                        showMessage("Ошибка. Не удалось обновить имя!")
+                    }
                 }
             }
         }
@@ -110,34 +114,43 @@ class PersonalInfoFragment : Fragment() {
         }
     }
 
-    // TODO: Вбахать во все фрагменты ScrollView
-    // TODO: error поле когда почта неверна, а когда только обновил - значок ожидания.
-    // TODO: [FIX] Имя не изменялось, но выскакивает: Имя успешно обновлено
-    // TODO: [FIX] Подчёркивает красным имя и почту.
-
     private fun updateEmail(newEmail: String) {
-        mCurrentUser.updateEmail(newEmail.replace(" ", "")).addOnCompleteListener { task ->
-            if (isCorrectView()) {
-                if (task.isSuccessful) {
-                    showMessage("Почта была успешно добавлена!", true)
-                } else if (task.isCanceled) {
-                    showMessage("Ошибка. Повторите попытку позже!", true)
+        if (isValidEmail(newEmail)) {
+            mCurrentUser.updateEmail(newEmail.replace(" ", "")).addOnCompleteListener { task ->
+                if (isCorrectView()) {
+                    if (task.isSuccessful) {
+                        showMessage("Почта была успешно добавлена!", true)
+                        updateUI(mCurrentUser)
+                    } else if (task.isCanceled) {
+                        showMessage("Ошибка. Повторите попытку позже!", true)
+                    }
                 }
-            }
-        }.addOnSuccessListener {
-            updateUI(mCurrentUser)
-        }.addOnFailureListener {
-            if (isCorrectView()) {
-                when (it) {
-                    is FirebaseAuthUserCollisionException -> showMessage("Ошибка. Почта занята.")
-                    is FirebaseAuthInvalidUserException -> showMessage("Ошибка. Аккаунт был заблокирован администратором.")
-                    is FirebaseAuthInvalidCredentialsException -> showMessage("Ошибка. Неверный формат почты.")
+            }.addOnSuccessListener {
+                updateUI(mCurrentUser)
+            }.addOnFailureListener {
+                if (isCorrectView()) {
+                    when (it) {
+                        is FirebaseAuthUserCollisionException -> showMessage("Ошибка. Почта занята.")
+                        is FirebaseAuthInvalidUserException -> showMessage("Ошибка. Аккаунт был заблокирован администратором.")
+                        is FirebaseAuthInvalidCredentialsException -> showMessage("Ошибка. Неверный формат почты.")
+                    }
                 }
             }
         }
-
+        else{
+            // Убрать галочку:
+            personal_info_email_textInputLayout.apply {
+                endIconMode = TextInputLayout.END_ICON_NONE
+            }
+            showMessage("Ошибка. Введите Вашу реальную почту.")
+        }
     }
 
+    private fun isValidEmail(target: CharSequence?): Boolean {
+        return target.isNullOrEmpty() || !TextUtils.isEmpty(target) && Patterns.EMAIL_ADDRESS.matcher(
+            target
+        ).matches()
+    }
 
 // TODO: Event для валидации почты.
 

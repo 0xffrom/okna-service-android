@@ -258,8 +258,7 @@ class LeadFragment : Fragment() {
     private fun isValidEmail(target: CharSequence?): Boolean {
         return target.isNullOrEmpty() || !TextUtils.isEmpty(target) && Patterns.EMAIL_ADDRESS.matcher(
             target
-        )
-            .matches()
+        ).matches()
     }
 
     // Проверка на валидный номер мобильного телефона:
