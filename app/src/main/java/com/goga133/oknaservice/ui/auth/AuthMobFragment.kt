@@ -1,7 +1,10 @@
 package com.goga133.oknaservice.ui.auth
 
+import android.content.ContentValues.TAG
+import android.nfc.Tag
 import android.os.Bundle
 import android.os.Handler
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -54,6 +57,7 @@ class AuthMobFragment : Fragment() {
                     try {
                         sendMobileCode()
                     } catch (e: Exception) {
+                        Log.d(TAG, e.toString())
                         showError("Ошибка. Повторите запрос позже!")
                         setLoading(false)
                     }
@@ -85,7 +89,10 @@ class AuthMobFragment : Fragment() {
                     when (e) {
                         is FirebaseTooManyRequestsException -> showError("Ошибка. Превышен лимит запросов, повторите попытку позже!")
                         is FirebaseNetworkException -> showError("Ошибка. Проверьте подключение к интернету!")
-                        else -> showError("Ошибка. Повторите запрос позже!")
+                        else -> {
+                            Log.d(TAG, e.toString())
+                            showError("Ошибка. Повторите запрос позже!")
+                        }
                     }
 
                     setLoading(false)

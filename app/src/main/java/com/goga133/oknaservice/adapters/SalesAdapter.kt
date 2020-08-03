@@ -1,25 +1,17 @@
 package com.goga133.oknaservice.adapters
 
 import android.content.Context
-import android.content.Intent
-import android.net.Uri
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
-import android.widget.LinearLayout
 import android.widget.TextView
-import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
 import com.goga133.oknaservice.R
-import com.goga133.oknaservice.models.Office
+import com.goga133.oknaservice.core.CircleTransform
 import com.goga133.oknaservice.models.SaleCard
-import com.google.android.material.imageview.ShapeableImageView
-import kotlinx.android.synthetic.main.model_office.view.*
+import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.model_sales.view.*
-import java.text.SimpleDateFormat
-import java.util.*
 
 
 class SalesAdapter(private val context: Context) : RecyclerView.Adapter<SalesAdapter.SalesHolder>() {
@@ -48,10 +40,10 @@ class SalesAdapter(private val context: Context) : RecyclerView.Adapter<SalesAda
         holder.title.text = salesArray[position].title
         holder.description.text = salesArray[position].description
         // Загрузка Image по URL.
-        Glide
-            .with(context)
+        Picasso
+            .get()
             .load(salesArray[position].imageUrl)
-            .circleCrop()
+            .transform(CircleTransform())
             .into(holder.titleImage)
 
     }

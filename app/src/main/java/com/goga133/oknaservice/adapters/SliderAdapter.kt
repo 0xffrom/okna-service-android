@@ -7,9 +7,9 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
-import com.bumptech.glide.Glide
 import com.goga133.oknaservice.R
 import com.smarteist.autoimageslider.SliderViewAdapter
+import com.squareup.picasso.Picasso
 
 
 class SliderAdapter(private val context: Context) :
@@ -41,8 +41,8 @@ class SliderAdapter(private val context: Context) :
         viewHolder.textViewDescription.text = sliderItem.description
         viewHolder.textViewDescription.textSize = 16f
         viewHolder.textViewDescription.setTextColor(Color.WHITE)
-
-        Glide.with(context)
+        Picasso
+            .get()
             .load(sliderItem.image)
             .into(viewHolder.imageViewBackground)
     }

@@ -46,7 +46,7 @@ class PersonalInfoFragment : Fragment() {
                 // Почта не пуста:
                 else {
                     // Почту можно обновить? Да -> обновляем, нет -> ошибка.
-                    if (oldEmail != newEmail)
+                    if (oldEmail != newEmail && !emailField.text.isNullOrEmpty())
                         updateEmail(emailField.text.toString())
                     else
                         showMessage("Ошибка. Вы ничего не заполнили!")
@@ -70,7 +70,7 @@ class PersonalInfoFragment : Fragment() {
                 // Поле от почты не пусто:
                 else {
                     // Поле от почты можно обновить -> обновляем почту и имя.
-                    if (newEmail != oldEmail) {
+                    if (newEmail != oldEmail && !emailField.text.isNullOrEmpty()) {
                         if (newName != mCurrentUser.displayName)
                             updateName(newName)
                         updateEmail(emailField.text.toString())

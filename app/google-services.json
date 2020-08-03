@@ -15,6 +15,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "848244208990-f19h8cb46o1f8o76m2qd6d75odken0c9.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.goga133.oknaservice",
+            "certificate_hash": "6a4777162ee12773e763469ba62086eb42d5587b"
+          }
+        },
+        {
           "client_id": "848244208990-d1cbb5ds4m1r1afa7b6gisrv1rb5qbog.apps.googleusercontent.com",
           "client_type": 3
         }

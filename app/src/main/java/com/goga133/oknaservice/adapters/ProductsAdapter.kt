@@ -10,11 +10,11 @@ import android.widget.TextView
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
 import com.goga133.oknaservice.R
 import com.goga133.oknaservice.models.Product
 import com.goga133.oknaservice.ui.lead.LeadViewModel
 import com.google.android.material.snackbar.Snackbar
+import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.model_product.view.*
 
 
@@ -57,7 +57,8 @@ class ProductsAdapter(
     }
 
     override fun onBindViewHolder(holder: ProductHolder, position: Int) {
-        Glide.with(context)
+        Picasso
+            .get()
             .load(getItem(position).windowIdResource)
             .into(holder.imageView)
 

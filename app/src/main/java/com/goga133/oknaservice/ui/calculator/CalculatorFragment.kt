@@ -132,7 +132,7 @@ class CalculatorFragment : Fragment() {
         }
 
         root.add_cart_button.setOnClickListener {
-            calculatorViewModel.insertProduct(
+            val operation = calculatorViewModel.insertProduct(
                 Product(
                     windowId,
                     sliderAdapter.getImageByWindowId(windowId),
@@ -157,6 +157,7 @@ class CalculatorFragment : Fragment() {
 
             Snackbar.make(root, "Товар был успешно добавлен в козину!", Snackbar.LENGTH_SHORT)
                 .show()
+
         }
 
 
@@ -305,12 +306,12 @@ class CalculatorFragment : Fragment() {
             isWinSlope, isWinGrid, isWinInstall, isWinDelivery
         )
 
-        root.add_cart_button.text =
-            "Добавить в корзину (${summaryPrice.sum + summaryPrice.sumD} р.)"
-        root.text_view_sumW.text = "Стоимость окна: ${summaryPrice.sumW} р."
-        root.text_view_sumO.text = "Стоимость опций: ${summaryPrice.sumO} р."
-        root.text_view_sumD.text = "Стоимость доставки: ${summaryPrice.sumD} р."
-        root.text_view_sumM.text = "Стоимость монтажа: ${summaryPrice.sumM} р."
+        root.cart_price_textView.text =
+            "${summaryPrice.sum + summaryPrice.sumD} ₽"
+        root.text_view_sumW.text = "Стоимость окна:\t ${summaryPrice.sumW} ₽"
+        root.text_view_sumO.text = "Стоимость опций:\t ${summaryPrice.sumO} ₽"
+        root.text_view_sumD.text = "Стоимость доставки:\t ${summaryPrice.sumD} ₽"
+        root.text_view_sumM.text = "Стоимость монтажа:\t ${summaryPrice.sumM} ₽"
     }
 
 
