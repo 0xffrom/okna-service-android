@@ -27,7 +27,7 @@ data class Product(
     val priceO: Int,
     val priceM: Int,
     val priceD: Int
-) : Parcelable {
+)  {
     constructor(
         uid: Int, windowId: String, windowIdResource : Int, h: Int, w: Int, profile: String,
         glass: String, home: String, isWinSill: Boolean, isWinTide: Boolean,
@@ -128,39 +128,4 @@ data class Product(
                 "Монтаж: $priceM р.\n" +
                 "Итог (без доставки): $priceSum р."
 
-    override fun writeToParcel(parcel: Parcel, flags: Int) {
-        parcel.writeString(windowId)
-        parcel.writeInt(windowIdResource)
-        parcel.writeInt(h)
-        parcel.writeInt(w)
-        parcel.writeString(profile)
-        parcel.writeString(glass)
-        parcel.writeString(home)
-        parcel.writeByte(if (isWinSill) 1 else 0)
-        parcel.writeByte(if (isWinTide) 1 else 0)
-        parcel.writeByte(if (isWinSlope) 1 else 0)
-        parcel.writeByte(if (isWinGrid) 1 else 0)
-        parcel.writeByte(if (isWinInstall) 1 else 0)
-        parcel.writeByte(if (isWinDelivery) 1 else 0)
-        parcel.writeInt(priceSum)
-        parcel.writeInt(priceW)
-        parcel.writeInt(priceO)
-        parcel.writeInt(priceM)
-        parcel.writeInt(priceD)
-        parcel.writeInt(uid)
-    }
-
-    override fun describeContents(): Int {
-        return 0
-    }
-
-    companion object CREATOR : Parcelable.Creator<Product> {
-        override fun createFromParcel(parcel: Parcel): Product {
-            return Product(parcel)
-        }
-
-        override fun newArray(size: Int): Array<Product?> {
-            return arrayOfNulls(size)
-        }
-    }
 }

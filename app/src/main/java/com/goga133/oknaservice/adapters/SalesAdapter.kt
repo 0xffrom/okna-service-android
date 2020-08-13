@@ -8,8 +8,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.goga133.oknaservice.R
-import com.goga133.oknaservice.core.CircleTransform
-import com.goga133.oknaservice.models.SaleCard
+import com.goga133.oknaservice.models.News
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.model_sales.view.*
 
@@ -23,9 +22,9 @@ class SalesAdapter(private val context: Context) : RecyclerView.Adapter<SalesAda
 
     }
 
-    private var salesArray: Array<SaleCard> = arrayOf<SaleCard> ()
+    private var salesArray: List<News> = listOf<News> ()
 
-    fun renewItems(newItems: Array<SaleCard>) {
+    fun renewItems(newItems: List<News>) {
         salesArray = newItems
         notifyDataSetChanged()
     }
@@ -38,12 +37,11 @@ class SalesAdapter(private val context: Context) : RecyclerView.Adapter<SalesAda
 
     override fun onBindViewHolder(holder: SalesHolder, position: Int) {
         holder.title.text = salesArray[position].title
-        holder.description.text = salesArray[position].description
+        holder.description.text = salesArray[position].content
         // Загрузка Image по URL.
         Picasso
             .get()
             .load(salesArray[position].imageUrl)
-            .transform(CircleTransform())
             .into(holder.titleImage)
 
     }
