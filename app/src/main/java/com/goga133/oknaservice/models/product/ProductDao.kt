@@ -1,10 +1,11 @@
-package com.goga133.oknaservice.models
+package com.goga133.oknaservice.models.product
 
 import androidx.lifecycle.LiveData
 import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
+import com.goga133.oknaservice.models.product.Product
 
 @Dao
 interface ProductDao {

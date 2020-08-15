@@ -2,15 +2,21 @@ package com.goga133.oknaservice.ui.calculator
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import com.goga133.oknaservice.R
-import com.goga133.oknaservice.adapters.SliderAdapter
-import com.goga133.oknaservice.models.Product
-import com.goga133.oknaservice.models.ProductDatabase
+import com.goga133.oknaservice.core.NetworkApi
+import com.goga133.oknaservice.core.NetworkService
+import com.goga133.oknaservice.models.Event
+import com.goga133.oknaservice.models.price.Price
+import com.goga133.oknaservice.models.price.UserWindow
+import com.goga133.oknaservice.models.product.Product
+import com.goga133.oknaservice.models.product.ProductDatabase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+
 
 class CalculatorViewModel(application: Application) : AndroidViewModel(application) {
 
@@ -20,119 +26,47 @@ class CalculatorViewModel(application: Application) : AndroidViewModel(applicati
         dao.insert(product)
     }
 
-    private val _arraySliders = MutableLiveData<ArrayList<SliderAdapter.SliderItem>>().apply {
-        value = arrayListOf(
-            SliderAdapter.SliderItem(
-                R.drawable.window1_1,
-                "1-1", "Одностворчатое окно"
-            ),
-            SliderAdapter.SliderItem(
-                R.drawable.window1_2,
-                "1-2", "Одностворчатое окно"
-            ),
-            SliderAdapter.SliderItem(
-                R.drawable.window1_3,
-                "1-3", "Одностворчатое окно"
-            ),
-            SliderAdapter.SliderItem(
-                R.drawable.window1_4,
-                "1-4", "Одностворчатое окно"
-            ),
-            SliderAdapter.SliderItem(
-                R.drawable.window1_5,
-                "1-5", "Одностворчатое окно"
-            ),
-            SliderAdapter.SliderItem(
-                R.drawable.window1_6,
-                "1-6", "Одностворчатое окно"
-            ),
-            SliderAdapter.SliderItem(
-                R.drawable.window2_1,
-                "2-1", "Двухстворчатое окно"
-            ),
-            SliderAdapter.SliderItem(
-                R.drawable.window2_2,
-                "2-2", "Двухстворчатое окно"
-            ),
-            SliderAdapter.SliderItem(
-                R.drawable.window2_3,
-                "2-3", "Двухстворчатое окно"
-            ),
-            SliderAdapter.SliderItem(
-                R.drawable.window2_4,
-                "2-4", "Двухстворчатое окно"
-            ),
-            SliderAdapter.SliderItem(
-                R.drawable.window2_5,
-                "2-5", "Двухстворчатое окно"
-            ),
-            SliderAdapter.SliderItem(
-                R.drawable.window2_6,
-                "2-6", "Двухстворчатое окно"
-            ),
-            SliderAdapter.SliderItem(
-                R.drawable.window2_7,
-                "2-7", "Двухстворчатое окно"
-            ),
-            SliderAdapter.SliderItem(
-                R.drawable.window2_8,
-                "2-8", "Двухстворчатое окно"
-            ),
-            SliderAdapter.SliderItem(
-                R.drawable.window2_9,
-                "2-9", "Двухстворчатое окно"
-            ),
-            SliderAdapter.SliderItem(
-                R.drawable.window3_1,
-                "3-1", "Трехстворчатое окно"
-            ),
-            SliderAdapter.SliderItem(
-                R.drawable.window3_2,
-                "3-2", "Трехстворчатое окно"
-            ),
-            SliderAdapter.SliderItem(
-                R.drawable.window3_3,
-                "3-3", "Трехстворчатое окно"
-            ),
-            SliderAdapter.SliderItem(
-                R.drawable.window3_4,
-                "3-4", "Трехстворчатое окно"
-            ),
-            SliderAdapter.SliderItem(
-                R.drawable.window3_5,
-                "3-5", "Трехстворчатое окно"
-            ),
-            SliderAdapter.SliderItem(
-                R.drawable.window3_6,
-                "3-6", "Трехстворчатое окно"
-            ),
-            SliderAdapter.SliderItem(
-                R.drawable.window3_7,
-                "3-7", "Трехстворчатое окно"
-            ),
-            SliderAdapter.SliderItem(
-                R.drawable.window4_1,
-                "4-1", "Балконный блок"
-            ),
-            SliderAdapter.SliderItem(
-                R.drawable.window4_2,
-                "4-2", "Балконный блок"
-            ),
-            SliderAdapter.SliderItem(
-                R.drawable.window4_3,
-                "4-3", "Балконный блок"
-            ),
-            SliderAdapter.SliderItem(
-                R.drawable.window4_4,
-                "4-4", "Балконный блок"
-            ),
-            SliderAdapter.SliderItem(
-                R.drawable.window4_5,
-                "4-5", "Балконный блок"
-            )
-        )
+    val priceLiveData = MutableLiveData<Event<Price>>()
+
+    fun getPrice() {
+        requestWithLiveData(priceLiveData) {
+            api.getPrice()
+        }
     }
 
-    val arraySliders: LiveData<ArrayList<SliderAdapter.SliderItem>> = _arraySliders
+    private var api: NetworkApi = NetworkService.retrofitService()
 
+    private fun <T> requestWithLiveData(
+        liveData: MutableLiveData<Event<T>>,
+        request: suspend () -> Call<T>
+    ) {
+
+        liveData.postValue(Event.loading())
+
+        this.viewModelScope.launch(Dispatchers.IO) {
+            try {
+                request.invoke().enqueue(object : Callback<T> {
+                    override fun onFailure(call: Call<T>, t: Throwable) {
+                        t.printStackTrace()
+                        liveData.postValue(Event.error(t))
+                    }
+
+                    override fun onResponse(
+                        call: Call<T>,
+                        response: Response<T>
+                    ) {
+                        if (response.isSuccessful) {
+                            liveData.postValue(Event.success(response.body()))
+                        }
+                        else {
+                            liveData.postValue(Event.error(Throwable(response.errorBody()?.string())))
+                        }
+                    }
+                })
+            } catch (e: Exception) {
+                e.printStackTrace()
+                liveData.postValue(Event.error(null))
+            }
+        }
+    }
 }

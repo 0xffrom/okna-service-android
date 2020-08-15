@@ -11,7 +11,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.goga133.oknaservice.R
-import com.goga133.oknaservice.models.Product
+import com.goga133.oknaservice.models.product.Product
 import com.goga133.oknaservice.ui.lead.LeadViewModel
 import com.google.android.material.snackbar.Snackbar
 import com.squareup.picasso.Picasso
@@ -42,7 +42,7 @@ class ProductsAdapter(
 
     }
 
-    fun getProductAt(position : Int) : Product{
+    fun getProductAt(position : Int) : Product {
         return getItem(position)
     }
 
@@ -59,7 +59,7 @@ class ProductsAdapter(
     override fun onBindViewHolder(holder: ProductHolder, position: Int) {
         Picasso
             .get()
-            .load(getItem(position).windowIdResource)
+            .load(getItem(position).windowImage)
             .into(holder.imageView)
 
         holder.description.text = getItem(position).toString()

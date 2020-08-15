@@ -1,4 +1,4 @@
-package com.goga133.oknaservice.models
+package com.goga133.oknaservice.models.product
 
 
 import android.content.Context

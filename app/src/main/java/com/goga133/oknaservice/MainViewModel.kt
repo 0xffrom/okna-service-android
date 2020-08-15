@@ -1,23 +1,17 @@
 package com.goga133.oknaservice
 
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
+import com.goga133.oknaservice.core.BaseViewModel
+import com.goga133.oknaservice.models.Event
+import com.goga133.oknaservice.models.info.Info
 
-class MainViewModel : ViewModel() {
+class MainViewModel : BaseViewModel() {
+    val infoLiveData = MutableLiveData<Event<Info>>()
 
-    private val _siteUrl = MutableLiveData<String>().apply {
-        value = "https://www.okna-servise.com/"
+    fun getInfo() {
+        requestWithLiveData(infoLiveData) {
+            api.getInfo()
+        }
     }
-    private val _phoneNumber = MutableLiveData<String>().apply {
-        value = "+74955056514"
-    }
-    private val _emailAddress = MutableLiveData<String>().apply {
-        value = "os@okna-servise.com"
-    }
-
-    val siteUrl: LiveData<String> = _siteUrl
-    val phoneNumber: LiveData<String> = _phoneNumber
-    val emailAddress: LiveData<String> = _emailAddress
 
 }

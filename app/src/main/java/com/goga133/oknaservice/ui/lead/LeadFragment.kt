@@ -24,7 +24,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.goga133.oknaservice.R
 import com.goga133.oknaservice.adapters.ProductsAdapter
 import com.goga133.oknaservice.models.Calculator
-import com.goga133.oknaservice.models.Product
+import com.goga133.oknaservice.models.product.Product
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textfield.TextInputLayout
 import kotlinx.android.synthetic.main.fragment_lead.view.*
@@ -248,8 +248,9 @@ class LeadFragment : Fragment() {
 
     private fun getProductsDelivery(products: List<Product>): Boolean {
         for (i in products.indices) {
-            if (products[i].isWinDelivery)
-                return true
+            // TODO: Я ЭТО ЗАКОМЕНТИЛ ВРЕМЕННО ЧЕЛ
+            //if (products[i].isWinDelivery)
+             //   return true
         }
         return false
     }
@@ -291,12 +292,12 @@ class LeadFragment : Fragment() {
 
     private fun getProductsSum(products: List<Product>): Int {
         var sum = 0
-        for (i in products.indices)
-            sum += products[i].priceSum
+        // TODO: Я ЭТО ЗАКОМЕНТИЛ ВРЕМЕННО ЧЕЛfor (i in products.indices)
+        // TODO: Я ЭТО ЗАКОМЕНТИЛ ВРЕМЕННО ЧЕЛsum += products[i].priceSum
 
         // Если есть доставка, то плюсуем только одну цену за доставку:
-        if (getProductsDelivery(products))
-            sum += Calculator.Price().delivery
+        // TODO: Я ЭТО ЗАКОМЕНТИЛ ВРЕМЕННО ЧЕЛif (getProductsDelivery(products))
+        // TODO: Я ЭТО ЗАКОМЕНТИЛ ВРЕМЕННО ЧЕЛ sum += Calculator.Price().delivery
         return sum
     }
 }

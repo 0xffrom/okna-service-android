@@ -8,13 +8,14 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import com.goga133.oknaservice.R
+import com.goga133.oknaservice.models.price.Window
 import com.smarteist.autoimageslider.SliderViewAdapter
 import com.squareup.picasso.Picasso
 
 
 class SliderAdapter(private val context: Context) :
     SliderViewAdapter<SliderAdapter.SliderAdapterVH>() {
-    private var mSliderItems: ArrayList<SliderItem> = arrayListOf()
+    private var mSliderItems: List<Window> = arrayListOf()
 
     override fun onCreateViewHolder(parent: ViewGroup): SliderAdapterVH {
         val inflate =
@@ -22,28 +23,24 @@ class SliderAdapter(private val context: Context) :
         return SliderAdapterVH(inflate)
     }
 
-    fun renewItems(sliderItems: ArrayList<SliderItem>) {
+    fun renewItems(sliderItems: List<Window>) {
         mSliderItems = sliderItems
         notifyDataSetChanged()
     }
 
-    fun getImageByWindowId(windowId : String) : Int{
-        return mSliderItems.first { x -> x.windowId == windowId }.image
-    }
-
-    fun getItemAt(position: Int): SliderItem {
+    fun getItemAt(position: Int): Window {
         return mSliderItems[position];
     }
 
     override fun onBindViewHolder(viewHolder: SliderAdapterVH, position: Int) {
 
-        val sliderItem: SliderItem = mSliderItems[position]
-        viewHolder.textViewDescription.text = sliderItem.description
+        val window: Window = mSliderItems[position]
+        viewHolder.textViewDescription.text = window.description
         viewHolder.textViewDescription.textSize = 16f
         viewHolder.textViewDescription.setTextColor(Color.WHITE)
         Picasso
             .get()
-            .load(sliderItem.image)
+            .load(window.imageUrl)
             .into(viewHolder.imageViewBackground)
     }
 
@@ -57,6 +54,4 @@ class SliderAdapter(private val context: Context) :
         val textViewDescription: TextView = itemView.findViewById(R.id.tv_auto_image_slider)
     }
 
-
-    data class SliderItem(val image: Int, val windowId: String, val description: String? = null)
 }

@@ -2,8 +2,8 @@ package com.goga133.oknaservice.ui.lead
 
 import android.app.Application
 import androidx.lifecycle.*
-import com.goga133.oknaservice.models.Product
-import com.goga133.oknaservice.models.ProductDatabase
+import com.goga133.oknaservice.models.product.Product
+import com.goga133.oknaservice.models.product.ProductDatabase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 

@@ -3,7 +3,7 @@ package com.goga133.oknaservice.core
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.goga133.oknaservice.models.News
+import com.goga133.oknaservice.models.Event
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import retrofit2.Call

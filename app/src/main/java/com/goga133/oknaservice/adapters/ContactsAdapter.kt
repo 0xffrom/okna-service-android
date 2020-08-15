@@ -10,14 +10,14 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.goga133.oknaservice.R
-import com.goga133.oknaservice.models.Office
+import com.goga133.oknaservice.models.Contact
 import kotlinx.android.synthetic.main.model_office.view.*
 
 
-class OfficesAdapter(private val context: Context) :
-    RecyclerView.Adapter<OfficesAdapter.OfficeHolder>() {
+class ContactsAdapter(private val context: Context) :
+    RecyclerView.Adapter<ContactsAdapter.ContactHolder>() {
 
-    class OfficeHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    class ContactHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val cityTextView: TextView = itemView.text_view_city
         val appointmentTextView: TextView = itemView.text_view_appointment
         val addressTextView: TextView = itemView.text_view_address
@@ -29,43 +29,43 @@ class OfficesAdapter(private val context: Context) :
         val telephoneLayout: LinearLayout = itemView.layout_telephone
     }
 
-    private var arrayOffices: Array<Office> = arrayOf<Office> ()
-    fun renewItems(newItems: Array<Office>) {
-        arrayOffices = newItems
+    private var arrayContacts: List<Contact> = listOf<Contact> ()
+    fun renewItems(newItems: List<Contact>?) {
+        arrayContacts = newItems ?: listOf()
         notifyDataSetChanged()
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): OfficeHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ContactHolder {
         val itemView =
             LayoutInflater.from(parent.context).inflate(R.layout.model_office, parent, false)
-        return OfficeHolder(itemView)
+        return ContactHolder(itemView)
     }
 
-    override fun onBindViewHolder(holder: OfficeHolder, position: Int) {
-        holder.addressTextView.text = arrayOffices[position].Address
-        holder.cityTextView.text = arrayOffices[position].City
-        holder.appointmentTextView.text = arrayOffices[position].Appointment
-        holder.mobileTextView.text = arrayOffices[position].Mobile
-        holder.mailTextView.text = arrayOffices[position].Mail
-        holder.workTimeTextView.text = arrayOffices[position].WorkTime
+    override fun onBindViewHolder(holder: ContactHolder, position: Int) {
+        holder.addressTextView.text = arrayContacts[position].address
+        holder.cityTextView.text = arrayContacts[position].city
+        holder.appointmentTextView.text = arrayContacts[position].office
+        holder.mobileTextView.text = arrayContacts[position].phone
+        holder.mailTextView.text = arrayContacts[position].email
+        holder.workTimeTextView.text = arrayContacts[position].workTime
 
         holder.addressLayout.setOnClickListener(View.OnClickListener {
             val gmmIntentUri =
-                Uri.parse("geo:${arrayOffices[position].Coordinates}?q=${arrayOffices[position].City},${(arrayOffices[position].Address)}")
+                Uri.parse("geo:${arrayContacts[position].mapCoordinates}?q=${arrayContacts[position].city},${(arrayContacts[position].address)}")
             Intent(Intent.ACTION_VIEW, gmmIntentUri).let { context.startActivity(it) }
         })
         holder.mailLayout.setOnClickListener(View.OnClickListener {
-            val mailIntentUri = Uri.parse("mailto:${arrayOffices[position].Mail}")
+            val mailIntentUri = Uri.parse("mailto:${arrayContacts[position].email}")
             Intent(Intent.ACTION_VIEW, mailIntentUri).let { context.startActivity(it) }
         })
         holder.telephoneLayout.setOnClickListener(View.OnClickListener {
             // Split делается для того, чтобы выбрать только первый номер:
             val telephoneIntentUri =
-                Uri.parse("tel:${arrayOffices[position].Mobile.split(',')[0]}")
+                Uri.parse("tel:${arrayContacts[position].phone.split(',')[0]}")
             Intent(Intent.ACTION_VIEW, telephoneIntentUri).let { context.startActivity(it) }
         })
     }
 
 
-    override fun getItemCount() = arrayOffices.size
+    override fun getItemCount() = arrayContacts.size
 }

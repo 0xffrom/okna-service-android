@@ -5,6 +5,8 @@ import android.net.Uri
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.drawerlayout.widget.DrawerLayout
@@ -14,6 +16,8 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
+import com.goga133.oknaservice.models.Status
+import com.goga133.oknaservice.models.info.Info
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.navigation.NavigationView
 
@@ -23,26 +27,28 @@ class MainActivity : AppCompatActivity() {
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var mainViewModel: MainViewModel
 
-    private lateinit var siteUrl : String
-    private lateinit var phoneNumber : String
-    private lateinit var emailAddress : String
+    companion object{
+        private const val DEFAULT_WEB = "https://www.okna-servise.com/"
+        private const val DEFAULT_PHONE = "74955056514"
+        private const val DEFAULT_EMAIL = "os@okna-servise.com"
+    }
+
+    private var web : String = DEFAULT_WEB
+    private var phone : String = DEFAULT_PHONE
+    private var email : String = DEFAULT_EMAIL
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        mainViewModel = ViewModelProviders.of(this).get(MainViewModel::class.java);
         setContentView(R.layout.activity_main)
+
+
         val toolbar: Toolbar = findViewById(R.id.toolbar)
         setSupportActionBar(toolbar)
 
         val drawerLayout: DrawerLayout = findViewById(R.id.drawer_layout)
         val navView: NavigationView = findViewById(R.id.nav_view)
         val navController = findNavController(R.id.nav_host_fragment)
-
-        // ViewModel
-        mainViewModel = ViewModelProviders.of(this).get(MainViewModel::class.java);
-        mainViewModel.emailAddress.observe(this, Observer { emailAddress = it })
-        mainViewModel.phoneNumber.observe(this, Observer { phoneNumber = it })
-        mainViewModel.siteUrl.observe(this, Observer { siteUrl = it })
-        // View Model
 
         appBarConfiguration = AppBarConfiguration(
             setOf(
@@ -56,10 +62,12 @@ class MainActivity : AppCompatActivity() {
                 R.id.nav_personal
             ), drawerLayout
         )
+
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
 
         val fab: FloatingActionButton = findViewById(R.id.fab)
+
         fab.setOnClickListener {
             if (navController.currentDestination?.id != R.id.nav_calculator)
                 navController.navigate(R.id.nav_calculator)
@@ -77,7 +85,43 @@ class MainActivity : AppCompatActivity() {
         }
 
 
+        observeGetPosts();
+        mainViewModel.getInfo();
+
     }
+
+    private fun observeGetPosts() {
+        mainViewModel.infoLiveData.observe(this, Observer {
+            when (it.status) {
+                Status.LOADING -> viewOneLoading()
+                Status.SUCCESS -> viewOneSuccess(it.data)
+                Status.ERROR -> viewOneError(it.error)
+            }
+        })
+    }
+
+    private fun viewOneLoading() {
+        //
+    }
+
+    private fun viewOneSuccess(data: Info?) {
+        if (data == null)
+            return
+
+        email = data.email
+        phone = data.phoneNumber
+        web = data.web
+    }
+
+    private fun viewOneError(error: Throwable?) {
+        Toast.makeText(findViewById<View>(android.R.id.content).rootView.context, when(error) {
+            is java.net.SocketTimeoutException -> "Проверьте подключение к интернету!"
+            else -> "Ошибка загрузки данных!"
+        }, Toast.LENGTH_LONG).show()
+
+        mainViewModel.getInfo();
+    }
+
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -85,26 +129,27 @@ class MainActivity : AppCompatActivity() {
         return true
     }
 
+
     // Обработчик нажатия на иконку на тулбаре сверху:
     override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {
         // Открытие звонилки:
         R.id.action_call -> {
             startActivity(Intent(Intent.ACTION_DIAL).apply {
-                data = Uri.parse("tel:$phoneNumber")
+                data = Uri.parse("tel:$phone")
             })
             true
         }
         // Открытие почты:
         R.id.action_mail -> {
             startActivity(Intent(Intent.ACTION_VIEW).apply {
-                data = Uri.parse("mailto:$emailAddress")
+                data = Uri.parse("mailto:$email")
             })
             true
         }
         // Открытие браузера:
         R.id.action_web -> {
             startActivity(Intent(Intent.ACTION_VIEW).apply {
-                data = Uri.parse(siteUrl)
+                data = Uri.parse(web)
             })
             true
         }
@@ -113,9 +158,8 @@ class MainActivity : AppCompatActivity() {
             // Invoke the superclass to handle it.
             super.onOptionsItemSelected(item)
         }
+
     }
-
-
     override fun onSupportNavigateUp(): Boolean {
         val navController = findNavController(R.id.nav_host_fragment)
         return navController.navigateUp(appBarConfiguration) || super.onSupportNavigateUp()
